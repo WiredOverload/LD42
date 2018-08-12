@@ -156,6 +156,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
         }
         pointUpdate();
+        player.update(mouseX, mouseY);
     }
     function mainLoop() {
         document.getElementById("TICKS").innerHTML = "Ticks: " + tick;
@@ -169,7 +170,6 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         rect = canvas.getBoundingClientRect();
         mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
         mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-        player.update(mouseX, mouseY);
     }
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);

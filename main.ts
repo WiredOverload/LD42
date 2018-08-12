@@ -180,6 +180,7 @@ function update() {
     }
 
     pointUpdate();
+    player.update(mouseX, mouseY);
 }
 
 function mainLoop() {
@@ -198,7 +199,6 @@ function getMousePos(canvas, evt) {
     rect = canvas.getBoundingClientRect();
     mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-    player.update(mouseX, mouseY);
 }
 
 canvas.addEventListener('mousemove', function(evt) {
