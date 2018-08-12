@@ -11,8 +11,9 @@ define(["require", "exports"], function (require, exports) {
             console.log(mouseY);
         };
         ship.prototype.render = function (context, mouseX, mouseY) {
-            context.fillStyle = "grey";
-            context.fillRect(mouseX, mouseY, 10, 10);
+            var drawing = new Image();
+            drawing.src = "assets/ship.png";
+            context.drawImage(drawing, mouseX, mouseY, 16, 16);
         };
         return ship;
     }());
