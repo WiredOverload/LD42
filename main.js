@@ -7,6 +7,8 @@
 var canvas = document.getElementById("imgCanvas");
 var context = canvas.getContext("2d");
 
+context.strokeStyle="#000000";
+
 //game tick increases constantly
 var tick = 0;
 
@@ -61,17 +63,23 @@ function pointUpdate() {
 }
 
 function render() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#FFFFFF";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    //context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#4800FF";
     
 
     pointList.forEach(element => {
         if(element.lines) {
             element.lines.forEach(element2 => {
-                context.strokeStyle="#FF0000";
                 context.beginPath();
-                context.moveTo(element2.x, element2.y);
-                context.lineTo(element2.x2, element2.y2);
+                context.moveTo(element2.x + 4, element2.y + 4);
+                if(element2.y2 == 0) {
+                    context.lineTo(element2.x2 + 4, element2.y2);
+                }
+                else {
+                    context.lineTo(element2.x2 + 4, element2.y2 + 8);
+                }
                 context.stroke();
             });
         }
