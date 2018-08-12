@@ -11,6 +11,7 @@ var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
 var context = canvas.getContext("2d");
 var mouseX = -10;
 var mouseY = -10;
+var rect;
 
 //game tick increases constantly
 var tick = 0;
@@ -194,12 +195,10 @@ function mainLoop() {
 window.requestAnimationFrame(mainLoop);
 
 function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    var prevMouseX = mouseX;
-    var prevMouseY = mouseY;
+    rect = canvas.getBoundingClientRect();
     mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-    player.update(mouseX, mouseY, prevMouseX, prevMouseY);
+    player.update(mouseX, mouseY);
 }
 
 canvas.addEventListener('mousemove', function(evt) {

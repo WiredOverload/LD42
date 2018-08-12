@@ -6,6 +6,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var context = canvas.getContext("2d");
     var mouseX = -10;
     var mouseY = -10;
+    var rect;
     var tick = 0;
     var spawnVel = 1;
     function Point(x, y, velX, velY, lines, health, stuck) {
@@ -165,12 +166,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     }
     window.requestAnimationFrame(mainLoop);
     function getMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        var prevMouseX = mouseX;
-        var prevMouseY = mouseY;
+        rect = canvas.getBoundingClientRect();
         mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
         mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-        player.update(mouseX, mouseY, prevMouseX, prevMouseY);
+        player.update(mouseX, mouseY);
     }
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);
