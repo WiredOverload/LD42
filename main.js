@@ -102,3 +102,4 @@ function getMousePos(canvas, evt) {
 canvas.addEventListener('mousemove', function (evt) {
     var mousePos = getMousePos(canvas, evt);
 }, false);
+//# sourceMappingURL=main.js.map
