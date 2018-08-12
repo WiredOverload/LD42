@@ -17,10 +17,7 @@ function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.velY = velY;
     this.health = health;
     this.stuck = stuck;//whether the point is stuck to a wall
-    if (lines)
-        this.lines = lines;//array of lines
-    else
-        this.lines = [];
+    this.lines = lines;//array of lines
 }
 
 function Line(x, y, x2, y2, health = 1, stuck = false) {
@@ -65,20 +62,14 @@ function render() {
     
 
     pointList.forEach(element => {
-<<<<<<< HEAD
-        element.lines.forEach(element2 => {
-            context.beginPath();
-            context.moveTo(element2.x, element2.y);
-            context.lineTo(element2.x2, element2.y2);
-            context.stroke();
-        });
-=======
-        if (element.lines) {
+        if(element.lines) {
             element.lines.forEach(element2 => {
-            
+                context.beginPath();
+                context.moveTo(element2.x, element2.y);
+                context.lineTo(element2.x2, element2.y2);
+                context.stroke();
             });
         }
->>>>>>> 6d811763d44d3582b1a9e38eef72c5a5c237e5ca
         context.fillRect(element.x, element.y, 8, 8);
     });
 }
