@@ -13,7 +13,11 @@ define(["require", "exports"], function (require, exports) {
         ship.prototype.render = function (context, mouseX, mouseY) {
             var drawing = new Image();
             drawing.src = "assets/ship.png";
-            context.drawImage(drawing, mouseX, mouseY, 16, 16);
+            context.save();
+            context.translate(mouseX + 8, mouseY + 8);
+            context.rotate(1);
+            context.drawImage(drawing, -8, -8);
+            context.restore();
         };
         return ship;
     }());

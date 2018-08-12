@@ -13,11 +13,11 @@ export class ship {
 
     render(context : CanvasRenderingContext2D, mouseX: number, mouseY: number) : void {
         var drawing = new Image();
-        drawing.src = "assets/ship.png"; // can also be a remote URL e.g. http://
-        // drawing.onload = function() {
-            context.drawImage(drawing,mouseX, mouseY, 16, 16);
-        // }
-        // context.fillStyle = "grey";
-        // context.fillRect(mouseX, mouseY, 10, 10);
+        drawing.src = "assets/ship.png"; 
+        context.translate(mouseX + 8, mouseY + 8);
+        context.rotate(1);
+        context.drawImage(drawing, -8, -8);
+        context.rotate(-1);
+        context.translate(-(mouseX + 8), -(mouseY + 8));
     }
 }
