@@ -7,6 +7,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var mouseX = -10;
     var mouseY = -10;
     var tick = 0;
+    var spawnX = -4;
     function Point(x, y, velX, velY, lines, health, stuck) {
         if (lines === void 0) { lines = []; }
         if (health === void 0) { health = 5; }
@@ -30,6 +31,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var pointList = [];
     var borderLine1 = new Line(-8, -8, -8, -8);
     var borderLine2 = new Line(-8, -8, -8, -8);
+    var borderLine3 = new Line(-8, -8, -8, -8);
+    var borderLine4 = new Line(-8, -8, -8, -8);
     function pointUpdate() {
         pointList.forEach(function (element) {
             if (!element.stuck) {
@@ -140,7 +143,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                     tempLines.push(new Line(0, 128, element.x, element.y));
                 }
             });
-            pointList.push(new Point(-4, 128, Math.random(), (Math.random() * 2) - 1, tempLines));
+            spawnX = borderLine1.x < borderLine2.x ? (borderLine1.x / 3) * 2 : (borderLine2.x / 3) * 2;
+            pointList.push(new Point(spawnX, 128, Math.random(), (Math.random() * 2) - 1, tempLines));
         }
         pointUpdate();
     }

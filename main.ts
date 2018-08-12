@@ -15,6 +15,9 @@ var mouseY = -10;
 //game tick increases constantly
 var tick = 0;
 
+//x coordinate of spawn position
+var spawnX = -4;
+
 function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.x = x;
     this.y = y;
@@ -36,8 +39,10 @@ function Line(x, y, x2, y2, health = 1) {
 //list of all points
 var pointList = [];
 
-var borderLine1 = new Line(-8, -8, -8, -8);
-var borderLine2 = new Line(-8, -8, -8, -8);
+var borderLine1 = new Line(-8, -8, -8, -8);//top to bottom
+var borderLine2 = new Line(-8, -8, -8, -8);//bottom to top
+var borderLine3 = new Line(-8, -8, -8, -8);//right to top
+var borderLine4 = new Line(-8, -8, -8, -8);//right to bottom
 
 function pointUpdate() {
     pointList.forEach(element => {
@@ -160,7 +165,8 @@ function update() {
                 tempLines.push(new Line(0, 128, element.x, element.y));
             }
         });
-        pointList.push(new Point(-4, 128, Math.random(), (Math.random() * 2) - 1, tempLines));//temp testing values
+        spawnX = borderLine1.x < borderLine2.x ? (borderLine1.x / 3) * 2 : (borderLine2.x / 3) * 2;
+        pointList.push(new Point(spawnX, 128, Math.random(), (Math.random() * 2) - 1, tempLines));//temp testing values
     }
 
     pointUpdate();
