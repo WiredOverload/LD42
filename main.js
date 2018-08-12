@@ -6,6 +6,8 @@
 //canvas creation
 var canvas = document.getElementById("imgCanvas");
 var context = canvas.getContext("2d");
+var mouseX = -10;
+var mouseY = -10;
 
 context.strokeStyle="#000000";
 
@@ -63,11 +65,9 @@ function pointUpdate() {
 }
 
 function render() {
-    context.fillStyle = "#FFFFFF";
+    context.fillStyle = "lightgrey";
     context.fillRect(0, 0, canvas.width, canvas.height);
     //context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "#4800FF";
-    
 
     pointList.forEach(element => {
         if(element.lines) {
@@ -83,7 +83,10 @@ function render() {
                 context.stroke();
             });
         }
+        context.fillStyle = "#4800FF";
         context.fillRect(element.x, element.y, 8, 8);
+        context.fillStyle = "grey";
+        context.fillRect(mouseX, mouseY, 10, 10);
     });
 }
 
@@ -113,11 +116,12 @@ function mainLoop() {
 
 window.requestAnimationFrame(mainLoop);
 
-//not actually used yet
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
-    return {
-        x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-        y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-    };
+    mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
+    mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
 }
+
+canvas.addEventListener('mousemove', function(evt) {
+    var mousePos = getMousePos(canvas, evt);
+}, false);
