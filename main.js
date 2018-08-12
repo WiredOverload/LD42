@@ -80,12 +80,12 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             }
             else {
                 if (element.y == 0) {
-                    if (element.x < borderLine1.x / 2) {
+                    if (element.x < (borderLine1.x / 3) * 2) {
                         pointList.splice(pointList.indexOf(element), 1);
                     }
                 }
                 else {
-                    if (element.x < borderLine2.x / 2) {
+                    if (element.x < (borderLine2.x / 3) * 2) {
                         pointList.splice(pointList.indexOf(element), 1);
                     }
                 }
