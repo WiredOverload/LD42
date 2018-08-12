@@ -2,6 +2,9 @@
  * 
  * 
 */
+import { ship } from "./ship";
+
+var player = new ship();
 
 //canvas creation
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
@@ -10,7 +13,6 @@ var mouseX = -10;
 var mouseY = -10;
 
 context.strokeStyle="#000000";
-
 //game tick increases constantly
 var tick = 0;
 
@@ -87,8 +89,8 @@ function render() {
         }
         context.fillStyle = "#4800FF";
         context.fillRect(element.x, element.y, 8, 8);
-        context.fillStyle = "grey";
-        context.fillRect(mouseX, mouseY, 10, 10);
+
+        player.render(context, mouseX, mouseY);
     });
 }
 
@@ -122,6 +124,7 @@ function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+    player.update(mouseX, mouseY);
 }
 
 canvas.addEventListener('mousemove', function(evt) {
