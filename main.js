@@ -28,8 +28,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.health = health;
     }
     var pointList = [];
-    var borderLine1 = new Line(0, 0, 0, 0);
-    var borderLine2 = new Line(0, 0, 0, 0);
+    var borderLine1 = new Line(-8, -8, -8, -8);
+    var borderLine2 = new Line(-8, -8, -8, -8);
     function pointUpdate() {
         pointList.forEach(function (element) {
             if (!element.stuck) {
@@ -78,6 +78,18 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                     element.stuck = true;
                 }
             }
+            else {
+                if (element.y == 0) {
+                    if (element.x < borderLine1.x / 2) {
+                        pointList.splice(pointList.indexOf(element), 1);
+                    }
+                }
+                else {
+                    if (element.x < borderLine2.x / 2) {
+                        pointList.splice(pointList.indexOf(element), 1);
+                    }
+                }
+            }
             element.lines.forEach(function (element2) {
                 element2.x = element.x;
                 element2.y = element.y;
@@ -88,7 +100,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         context.strokeStyle = "#000000";
         context.fillStyle = "lightgrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#FF0000";
+        context.fillStyle = "#800000";
         context.beginPath();
         context.moveTo(0, 0);
         context.lineTo(borderLine1.x + 4, borderLine1.y);
@@ -128,7 +140,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                     tempLines.push(new Line(0, 128, element.x, element.y));
                 }
             });
-            pointList.push(new Point(0, 128, Math.random(), (Math.random() * 2) - 1, tempLines));
+            pointList.push(new Point(-4, 128, Math.random(), (Math.random() * 2) - 1, tempLines));
         }
         pointUpdate();
     }
