@@ -160,9 +160,11 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     window.requestAnimationFrame(mainLoop);
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
+        var prevMouseX = mouseX;
+        var prevMouseY = mouseY;
         mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
         mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
-        player.update(mouseX, mouseY);
+        player.update(mouseX, mouseY, prevMouseX, prevMouseY);
     }
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);

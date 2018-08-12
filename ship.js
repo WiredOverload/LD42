@@ -5,19 +5,24 @@ define(["require", "exports"], function (require, exports) {
         function ship() {
             this.x = 0;
             this.y = 0;
+            this.angle = 0;
+            this.prevMouseX = 0;
+            this.prevMouseX = 0;
         }
-        ship.prototype.update = function (mouseX, mouseY) {
-            console.log(mouseX);
-            console.log(mouseY);
+        ship.prototype.update = function (mouseX, mouseY, prevMouseX, prevMouseY) {
+            this.x = prevMouseX;
+            this.y = prevMouseY;
+            this.angle = Math.atan2(prevMouseY - mouseY, prevMouseX - mouseX);
         };
         ship.prototype.render = function (context, mouseX, mouseY) {
             var drawing = new Image();
             drawing.src = "assets/ship.png";
-            context.save();
             context.translate(mouseX + 8, mouseY + 8);
-            context.rotate(1);
+            console.log(this.angle);
+            context.rotate(this.angle + 3 * Math.PI / 2);
             context.drawImage(drawing, -8, -8);
-            context.restore();
+            context.rotate(-(this.angle + 3 * Math.PI / 2));
+            context.translate(-(mouseX + 8), -(mouseY + 8));
         };
         return ship;
     }());
