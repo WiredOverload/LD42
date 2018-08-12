@@ -24,17 +24,19 @@ function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.lines = lines;//array of lines
 }
 
-function Line(x, y, x2, y2, health = 1, stuck = false) {
+function Line(x, y, x2, y2, health = 1) {
     this.x = x;
     this.y = y;
     this.x2 = x2;
     this.y2 = y2;
     this.health = health;
-    this.stuck = stuck;//whether the point is stuck to a wall
 }
 
 //list of all points
 var pointList = [];
+
+var borderLine1 = new Line(0, 0, 0, 0);
+var borderLine2 = new Line(0, 0, 0, 0);
 
 function pointUpdate() {
     pointList.forEach(element => {
