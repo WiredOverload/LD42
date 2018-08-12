@@ -29,6 +29,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.health = health;
     }
     var pointList = [];
+    pointList.push(new Point(1016, 85, 0, 0));
+    pointList.push(new Point(1016, 171, 0, 0));
     var borderLine1 = new Line(-8, -8, -8, -8);
     var borderLine2 = new Line(-8, -8, -8, -8);
     var borderLine3 = new Line(-8, -8, -8, -8);
@@ -103,7 +105,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         context.strokeStyle = "#000000";
         context.fillStyle = "lightgrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#800000";
+        context.fillStyle = "#000000";
         context.beginPath();
         context.moveTo(0, 0);
         context.lineTo(borderLine1.x + 4, borderLine1.y);
@@ -130,7 +132,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                     context.stroke();
                 });
             }
-            context.fillStyle = "#4800FF";
+            context.fillStyle = "#000000";
             context.fillRect(element.x, element.y, 8, 8);
         });
         player.render(context, mouseX, mouseY);

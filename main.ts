@@ -39,6 +39,10 @@ function Line(x, y, x2, y2, health = 1) {
 //list of all points
 var pointList = [];
 
+//single point to help triangulate other point position
+pointList.push(new Point(1016, 85, 0, 0))
+pointList.push(new Point(1016, 171, 0, 0))
+
 var borderLine1 = new Line(-8, -8, -8, -8);//top to bottom
 var borderLine2 = new Line(-8, -8, -8, -8);//bottom to top
 var borderLine3 = new Line(-8, -8, -8, -8);//right to top
@@ -121,7 +125,7 @@ function render() {
     //context.clearRect(0, 0, canvas.width, canvas.height);
 
     //context.strokeStyle="#FF0000";
-    context.fillStyle="#800000";
+    context.fillStyle="#000000";//#800000
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(borderLine1.x + 4, borderLine1.y);
@@ -150,7 +154,7 @@ function render() {
                 context.stroke();
             });
         }
-        context.fillStyle = "#4800FF";
+        context.fillStyle = "#000000";//4800FF
         context.fillRect(element.x, element.y, 8, 8);
     });
 
