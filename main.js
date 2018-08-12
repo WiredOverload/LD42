@@ -52,7 +52,11 @@ function pointUpdate() {
             }
             //place projectile collision here
         }
-        
+        element.lines.forEach(element2 => {
+            element2.x = element.x;
+            element2.y = element.y;
+
+        });
     });
 }
 
@@ -79,7 +83,7 @@ function update() {
     if(tick % 60 == 0) {
         var tempLines = [];
         pointList.forEach(element => {
-            if (element) {
+            if (element.stuck) {
                 tempLines.push(new Line(0, 128, element.x, element.y));
             }
         });
