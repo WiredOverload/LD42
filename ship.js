@@ -11,10 +11,14 @@ define(["require", "exports"], function (require, exports) {
         }
         ship.prototype.update = function (mouseX, mouseY) {
             this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
-            this.x += Math.cos(this.angle) * this.vel;
-            this.y += Math.sin(this.angle) * this.vel;
+            var v1 = this.x - mouseX;
+            var v2 = this.y - mouseY;
+            if (Math.sqrt(v1 * v1 + v2 * v2) > 20) {
+                this.x += Math.cos(this.angle) * this.vel;
+                this.y += Math.sin(this.angle) * this.vel;
+            }
         };
-        ship.prototype.render = function (context, mouseX, mouseY) {
+        ship.prototype.render = function (context) {
             var drawing = new Image();
             drawing.src = "assets/ship.png";
             context.translate(this.x, this.y);

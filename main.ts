@@ -163,7 +163,7 @@ function render() {
         context.fillRect(element.x, element.y, 8, 8);
     });
 
-    player.render(context, mouseX, mouseY);
+    player.render(context);
 }
 
 function update() {

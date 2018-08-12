@@ -141,7 +141,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             context.fillStyle = "#000000";
             context.fillRect(element.x, element.y, 8, 8);
         });
-        player.render(context, mouseX, mouseY);
+        player.render(context);
     }
     function update() {
         if (tick % 60 == 0) {
