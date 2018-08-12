@@ -10,7 +10,7 @@ var context = canvas.getContext("2d");
 //game tick increases constantly
 var tick = 0;
 
-function Point(x, y, velX, velY, lines, health = 5, stuck = false) {
+function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.x = x;
     this.y = y;
     this.velX = velX;
@@ -63,7 +63,10 @@ function render() {
 
     pointList.forEach(element => {
         element.lines.forEach(element2 => {
-            
+            context.beginPath();
+            context.moveTo(element2.x, element2.y);
+            context.lineTo(element2.x2, element2.y2);
+            context.stroke();
         });
         context.fillRect(element.x, element.y, 8, 8);
     });
