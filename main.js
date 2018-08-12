@@ -17,7 +17,10 @@ function Point(x, y, velX, velY, lines, health = 5, stuck = false) {
     this.velY = velY;
     this.health = health;
     this.stuck = stuck;//whether the point is stuck to a wall
-    this.lines = lines;//array of lines
+    if (lines)
+        this.lines = lines;//array of lines
+    else
+        this.lines = [];
 }
 
 function Line(x, y, x2, y2, health = 1, stuck = false) {
@@ -62,9 +65,11 @@ function render() {
     
 
     pointList.forEach(element => {
-        element.lines.forEach(element2 => {
+        if (element.lines) {
+            element.lines.forEach(element2 => {
             
-        });
+            });
+        }
         context.fillRect(element.x, element.y, 8, 8);
     });
 }
@@ -73,7 +78,9 @@ function update() {
     if(tick % 60 == 0) {
         var tempLines = [];
         pointList.forEach(element => {
-            tempLines.push(new Line(0, 128, element.x, element.y));
+            if (element) {
+                tempLines.push(new Line(0, 128, element.x, element.y));
+            }
         });
         pointList.push(new Point(0, 128, Math.random(), (Math.random() * 2) - 1), tempLines);//temp testing values
     }
@@ -88,10 +95,10 @@ function mainLoop() {
 
     update();
     render();
-    requestAnimationFrame(mainLoop);
+    window.requestAnimationFrame(mainLoop);
 }
 
-requestAnimationFrame(mainLoop);
+window.requestAnimationFrame(mainLoop);
 
 //not actually used yet
 function getMousePos(canvas, evt) {
