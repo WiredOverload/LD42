@@ -15,8 +15,7 @@ var mouseY = -10;
 //game tick increases constantly
 var tick = 0;
 
-//x coordinate of spawn position
-var spawnX = -4;
+var spawnVel = 1;
 
 function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.x = x;
@@ -39,9 +38,8 @@ function Line(x, y, x2, y2, health = 1) {
 //list of all points
 var pointList = [];
 
-//single point to help triangulate other point position
-pointList.push(new Point(1016, 85, 0, 0))
-pointList.push(new Point(1016, 171, 0, 0))
+//single point to help find other point positions
+var tracker = new Point(1016, 128, 0, 0)
 
 var borderLine1 = new Line(-8, -8, -8, -8);//top to bottom
 var borderLine2 = new Line(-8, -8, -8, -8);//bottom to top
@@ -100,12 +98,12 @@ function pointUpdate() {
         }
         else {
             if(element.y == 0) {
-                if(element.x < (borderLine1.x / 3) * 2) {
+                if(element.x < borderLine1.x - 64) {
                     pointList.splice(pointList.indexOf(element), 1);
                 }
             }
             else {
-                if(element.x < (borderLine2.x / 3) * 2) {
+                if(element.x < borderLine2.x - 64) {
                     pointList.splice(pointList.indexOf(element), 1);
                 }
             }
@@ -151,6 +149,12 @@ function render() {
                 else {
                     context.lineTo(element2.x2 + 4, element2.y2 + 8);
                 }
+                if(element2.x2 == 1016 && element2.y2 == 128) {
+                    context.strokeStyle="#FFFFFF";
+                }
+                else {
+                    context.strokeStyle="#000000";
+                }
                 context.stroke();
             });
         }
@@ -169,8 +173,9 @@ function update() {
                 tempLines.push(new Line(0, 128, element.x, element.y));
             }
         });
-        spawnX = borderLine1.x < borderLine2.x ? (borderLine1.x / 3) * 2 : (borderLine2.x / 3) * 2;
-        pointList.push(new Point(spawnX, 128, Math.random(), (Math.random() * 2) - 1, tempLines));//temp testing values
+        tempLines.push(new Line(0, 128, tracker.x, tracker.y));
+        spawnVel = borderLine1.x2 < borderLine2.x2 ? (borderLine1.x / 512) + 1 : (borderLine2.x / 512) + 1;
+        pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
     }
 
     pointUpdate();
