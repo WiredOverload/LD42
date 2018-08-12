@@ -64,6 +64,7 @@ function render() {
     pointList.forEach(element => {
         if(element.lines) {
             element.lines.forEach(element2 => {
+                context.strokeStyle="#FF0000";
                 context.beginPath();
                 context.moveTo(element2.x, element2.y);
                 context.lineTo(element2.x2, element2.y2);
@@ -82,7 +83,7 @@ function update() {
                 tempLines.push(new Line(0, 128, element.x, element.y));
             }
         });
-        pointList.push(new Point(0, 128, Math.random(), (Math.random() * 2) - 1), tempLines);//temp testing values
+        pointList.push(new Point(0, 128, Math.random(), (Math.random() * 2) - 1, tempLines));//temp testing values
     }
 
     pointUpdate();
