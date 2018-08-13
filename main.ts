@@ -199,7 +199,7 @@ function render() {
                 else {
                     context.lineTo(element2.x2 + 4, element2.y2 + 8);
                 }
-                if(element2.x2 == 1016 && element2.y2 == 128) {
+                if(element2.x2 == 1020 && element2.y2 == 128) {
                     context.strokeStyle="#FFFFFF";
                 }
                 else {
