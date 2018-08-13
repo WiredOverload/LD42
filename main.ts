@@ -136,7 +136,6 @@ function pointUpdate() {
                     borderLine4 = tempLine;
                 }
             }
-            //place projectile collision here
         }
         else {
             //point deletion
@@ -220,6 +219,7 @@ function render() {
         bullet.render(context);
     });
 }
+render();
 
 function update() {
     if(tick % 60 == 0) {
@@ -244,6 +244,8 @@ function update() {
 
     bullets = bullets.filter(bullet => bullet.alive);
     pointList = pointList.filter(point => point.alive);
+
+
 }
 
 function mainLoop() {
@@ -271,6 +273,7 @@ canvas.onmousedown = function() {
     if(!isGameStarted) {
         isGameStarted = true;
         music.play();
+        music.volume = 0.7;
         music.loop = true;
         window.requestAnimationFrame(mainLoop);
     }

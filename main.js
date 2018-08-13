@@ -192,6 +192,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             bullet.render(context);
         });
     }
+    render();
     function update() {
         if (tick % 60 == 0) {
             var tempLines = [];
@@ -232,6 +233,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         if (!isGameStarted) {
             isGameStarted = true;
             music.play();
+            music.volume = 0.7;
             music.loop = true;
             window.requestAnimationFrame(mainLoop);
         }
