@@ -81,6 +81,34 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                 else if (element.x >= 1016) {
                     element.x = 1016;
                     element.stuck = true;
+                    var isFarthestUp = true;
+                    var isFarthestDown = true;
+                    pointList.forEach(function (element2) {
+                        if (element2.stuck == true && element2.x == 1016 && element2.y > element.y) {
+                            isFarthestUp = false;
+                        }
+                        else if (element2.stuck == true && element2.x == 1016 && element2.y < element.y) {
+                            isFarthestDown = false;
+                        }
+                    });
+                    if (isFarthestUp) {
+                        var tempLine = new Line(element.x, element.y, 0, 0);
+                        element.lines.forEach(function (element2) {
+                            if (element2.y2 == 0 && element2.x2 > tempLine.x2) {
+                                tempLine.x2 = element2.x2;
+                            }
+                        });
+                        borderLine3 = tempLine;
+                    }
+                    if (isFarthestDown) {
+                        var tempLine = new Line(element.x, element.y, 0, 0);
+                        element.lines.forEach(function (element2) {
+                            if (element2.y2 == 248 && element2.x2 > tempLine.x2) {
+                                tempLine.x2 = element2.x2;
+                            }
+                        });
+                        borderLine4 = tempLine;
+                    }
                 }
             }
             else {
@@ -117,6 +145,14 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         context.lineTo(borderLine2.x + 4, borderLine2.y + 8);
         context.lineTo(borderLine2.x2 + 4, borderLine2.y2);
         context.lineTo(0, 0);
+        context.fill();
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(borderLine3.x2 + 4, borderLine3.y2);
+        context.lineTo(borderLine3.x + 8, borderLine3.y + 4);
+        context.lineTo(borderLine4.x + 8, borderLine4.y + 4);
+        context.lineTo(borderLine4.x2 + 4, borderLine4.y2);
+        context.lineTo(0, 256);
         context.fill();
         pointList.forEach(function (element) {
             if (element.lines) {
