@@ -24,6 +24,8 @@ var isGameStarted:boolean = false;
 
 var isPlayerAlive:boolean = true;
 
+var highScore = 0;
+
 //spawned point speed
 var spawnVel = 1;
 //how quickly points spawn, larger = longer
@@ -262,7 +264,7 @@ function update() {
         is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
         is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
         is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
-            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + " (Click to retry)";
+            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
             isPlayerAlive = false;
             isGameStarted = false;
             render();
@@ -273,7 +275,10 @@ function update() {
             player.x > point.x &&
             player.y < point.y + 8 && 
             player.y > point.y){
-                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + " (Click to retry)";
+                if(tick > highScore) {
+                    highScore = tick;
+                }
+                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
                 isPlayerAlive = false;
                 isGameStarted = false;
                 render();

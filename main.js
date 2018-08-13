@@ -12,6 +12,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var music = new Audio("assets/RayTracer2.mp3");
     var isGameStarted = false;
     var isPlayerAlive = true;
+    var highScore = 0;
     var spawnVel = 1;
     var spawnRate = 60;
     var explosion = new Image();
@@ -224,7 +225,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
-            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + " (Click to retry)";
+            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
             isPlayerAlive = false;
             isGameStarted = false;
             render();
@@ -235,7 +236,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                 player.x > point.x &&
                 player.y < point.y + 8 &&
                 player.y > point.y) {
-                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + " (Click to retry)";
+                if (tick > highScore) {
+                    highScore = tick;
+                }
+                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
                 isPlayerAlive = false;
                 isGameStarted = false;
                 render();
