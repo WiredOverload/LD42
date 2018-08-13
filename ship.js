@@ -42,8 +42,43 @@ define(["require", "exports"], function (require, exports) {
             context.rotate(-(this.angle + Math.PI / 2));
             context.translate(-this.x, -this.y);
         };
+        ship.prototype.shoot = function () {
+            return new bullet(this.x, this.y, this.angle);
+        };
         return ship;
     }());
     exports.ship = ship;
+    var bullet = (function () {
+        function bullet(XPos, YPos, Angle) {
+            this.x = XPos;
+            this.y = YPos;
+            this.angle = Angle;
+            this.w = 2;
+            this.h = 5;
+            this.vel = 8;
+            this.alive = true;
+        }
+        bullet.prototype.update = function () {
+            this.x += Math.cos(this.angle) * this.vel;
+            this.y += Math.sin(this.angle) * this.vel;
+            if (this.x > 1024 || this.x < 0) {
+                this.alive = false;
+            }
+            if (this.y > 256 || this.y < 0) {
+                this.alive = false;
+            }
+        };
+        bullet.prototype.render = function (context) {
+            var drawing = new Image();
+            drawing.src = "assets/grayLaser.png";
+            context.translate(this.x, this.y);
+            context.rotate(this.angle + 3 * Math.PI / 2);
+            context.drawImage(drawing, -4, -8);
+            context.rotate(-(this.angle + 3 * Math.PI / 2));
+            context.translate(-this.x, -this.y);
+        };
+        return bullet;
+    }());
+    exports.bullet = bullet;
 });
 //# sourceMappingURL=ship.js.map

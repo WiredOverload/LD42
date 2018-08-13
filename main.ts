@@ -3,8 +3,10 @@
  * 
 */
 import { ship } from "./ship";
+import { bullet } from "./ship";
 
 var player = new ship();
+var bullets:bullet[] = [];
 
 //canvas creation
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
@@ -202,6 +204,10 @@ function render() {
     });
 
     player.render(context);
+
+    bullets.forEach(bullet => {
+        bullet.render(context);
+    });
 }
 
 function update() {
@@ -218,7 +224,14 @@ function update() {
     }
 
     pointUpdate();
+
     player.update(mouseX, mouseY);
+
+    bullets.forEach(bullet => {
+        bullet.update();
+    });
+
+    bullets = bullets.filter(bullet => bullet.alive);
 }
 
 function mainLoop() {
@@ -242,3 +255,7 @@ function getMousePos(canvas, evt) {
 canvas.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(canvas, evt);
 }, false);
+
+canvas.onclick = function() {
+    bullets.push(player.shoot());
+}

@@ -47,4 +47,48 @@ export class ship {
         context.rotate(-(this.angle + Math.PI/2));
         context.translate(-this.x, -this.y);
     }
+
+    shoot() : bullet {
+        return new bullet(this.x, this.y, this.angle);
+    }
+}
+
+export class bullet {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    vel: number;
+    angle: number;
+    alive: boolean;
+    constructor(XPos: number, YPos: number, Angle: number) {
+        this.x = XPos;
+        this.y = YPos;
+        this.angle = Angle;
+        this.w = 2;
+        this.h = 5;
+        this.vel = 8;
+        this.alive = true;
+    }
+
+    update() {
+        this.x += Math.cos(this.angle) * this.vel;
+        this.y += Math.sin(this.angle) * this.vel;
+        if (this.x > 1024 || this.x < 0) {
+            this.alive = false;
+        }
+        if (this.y > 256 || this.y < 0) {
+            this.alive = false;
+        }
+    }
+
+    render(context : CanvasRenderingContext2D) : void {
+        var drawing = new Image();
+        drawing.src = "assets/grayLaser.png";
+        context.translate(this.x, this.y);
+        context.rotate(this.angle + 3*Math.PI/2);
+        context.drawImage(drawing, -4, -8);
+        context.rotate(-(this.angle + 3*Math.PI/2));
+        context.translate(-this.x, -this.y);
+    }
 }

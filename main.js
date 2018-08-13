@@ -2,6 +2,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     "use strict";
     exports.__esModule = true;
     var player = new ship_1.ship();
+    var bullets = [];
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
     var mouseX = -10;
@@ -178,6 +179,9 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             context.fillRect(element.x, element.y, 8, 8);
         });
         player.render(context);
+        bullets.forEach(function (bullet) {
+            bullet.render(context);
+        });
     }
     function update() {
         if (tick % 60 == 0) {
@@ -193,6 +197,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         }
         pointUpdate();
         player.update(mouseX, mouseY);
+        bullets.forEach(function (bullet) {
+            bullet.update();
+        });
+        bullets = bullets.filter(function (bullet) { return bullet.alive; });
     }
     function mainLoop() {
         document.getElementById("TICKS").innerHTML = "Ticks: " + tick;
@@ -210,5 +218,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);
     }, false);
+    canvas.onclick = function () {
+        bullets.push(player.shoot());
+    };
 });
 //# sourceMappingURL=main.js.map
