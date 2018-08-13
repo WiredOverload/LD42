@@ -13,6 +13,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var isGameStarted = false;
     var isPlayerAlive = true;
     var spawnVel = 1;
+    var spawnRate = 60;
     var explosion = new Image();
     explosion.src = "assets/mediumExplosion2.png";
     function Point(x, y, velX, velY, lines, health, stuck) {
@@ -197,7 +198,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     }
     render();
     function update() {
-        if (tick % 60 == 0) {
+        if (tick % spawnRate == 0) {
             var tempLines = [];
             pointList.forEach(function (element) {
                 if (element.stuck) {
@@ -207,6 +208,9 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             tempLines.push(new Line(0, 128, tracker.x, tracker.y));
             spawnVel = borderLine1.x2 < borderLine2.x2 ? (borderLine1.x / 512) + 1 : (borderLine2.x / 512) + 1;
             pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
+            if (tick % (spawnRate * 5) == 0 && spawnRate != 1) {
+                spawnRate--;
+            }
         }
         pointUpdate();
         player.update(mouseX, mouseY);
