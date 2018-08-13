@@ -29,6 +29,10 @@ function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.stuck = stuck;//whether the point is stuck to a wall
     this.lines = lines;//array of lines
     this.alive = true;
+    this.pop = function() {
+        this.alive = false;
+        tick += 180;
+    }
 }
 
 function Line(x, y, x2, y2, health = 1) {
@@ -238,7 +242,7 @@ function update() {
 
 function mainLoop() {
 
-    document.getElementById("TICKS").innerHTML = "Ticks: " + tick;
+    document.getElementById("TICKS").innerHTML = "Score: " + tick;
     tick++;
 
     update();

@@ -81,7 +81,7 @@ export class bullet {
             node.x + 8 > this.x &&
             node.y < this.y + this.h &&
             8 + node.y > this.y) {
-                node.alive = false;
+                node.pop();
             }
         });
 

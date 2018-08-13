@@ -67,7 +67,7 @@ define(["require", "exports"], function (require, exports) {
                     node.x + 8 > _this.x &&
                     node.y < _this.y + _this.h &&
                     8 + node.y > _this.y) {
-                    node.alive = false;
+                    node.pop();
                 }
             });
             if (this.x > 1024 || this.x < 0) {

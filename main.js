@@ -22,6 +22,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.stuck = stuck;
         this.lines = lines;
         this.alive = true;
+        this.pop = function () {
+            this.alive = false;
+            tick += 180;
+        };
     }
     function Line(x, y, x2, y2, health) {
         if (health === void 0) { health = 1; }
@@ -205,7 +209,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         pointList = pointList.filter(function (point) { return point.alive; });
     }
     function mainLoop() {
-        document.getElementById("TICKS").innerHTML = "Ticks: " + tick;
+        document.getElementById("TICKS").innerHTML = "Score: " + tick;
         tick++;
         update();
         render();
