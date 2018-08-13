@@ -333,4 +333,4 @@ function is_in_triangle (px,py,ax,ay,bx,by,cx,cy){
     var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
     
     return ((u >= 0) && (v >= 0) && (u + v < 1));
-    }
+}

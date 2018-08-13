@@ -10,9 +10,13 @@
   <body>
     <h1 id="TICKS", style="color:white">Click to Play</h1>
     <br>
-    <canvas style=
-      "border:0px solid white; margin:0; padding:0; position:relative; left:50px; top:50px; width:1024px; height:256px" 
-      id="imgCanvas" width="1024" height="256"></canvas>
+    <div id="container"> <!-- horizontal centering (margin:auto) -->
+      <div class="sidebar"> <!-- keep in screen when zooming (position:fixed) -->
+        <canvas style=
+          "border:0px solid white; margin:0; padding:0; position:relative; left:50px; top:50px; width:1024px; height:256px" 
+          id="imgCanvas" width="1024" height="256"></canvas>
+      </div>
+    </div>
     <script data-main="main" src="./lib/require.js"></script>
   </body>
 </html>
