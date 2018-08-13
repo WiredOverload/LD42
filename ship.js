@@ -15,12 +15,12 @@ define(["require", "exports"], function (require, exports) {
             var v1 = this.x - mouseX;
             var v2 = this.y - mouseY;
             var distance = Math.sqrt(v1 * v1 + v2 * v2);
-            if (distance > 100) {
+            if (distance > 75) {
                 if (this.vel < this.maxVel) {
                     this.vel += this.accl;
                 }
             }
-            else if (distance <= 100) {
+            else if (distance <= 75) {
                 if (this.vel < 1.5) {
                     this.vel += this.accl;
                 }
@@ -28,8 +28,7 @@ define(["require", "exports"], function (require, exports) {
                     this.vel -= this.accl;
                 }
             }
-            if (distance > 20) {
-                console.log(this.vel);
+            if (distance > 10) {
                 this.x += Math.cos(this.angle) * this.vel;
                 this.y += Math.sin(this.angle) * this.vel;
             }
