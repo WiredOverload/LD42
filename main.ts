@@ -22,7 +22,12 @@ var music = new Audio("assets/RayTracer2.mp3");
 
 var isGameStarted:boolean = false;
 
+var isPlayerAlive:boolean = true;
+
 var spawnVel = 1;
+
+var explosion = new Image();
+explosion.src = "assets/mediumExplosion2.png"
 
 function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.x = x;
@@ -245,17 +250,27 @@ function update() {
     bullets = bullets.filter(bullet => bullet.alive);
     pointList = pointList.filter(point => point.alive);
 
-
+    //player death
+    if(is_in_triangle(player.x + 8, player.y + 8, borderLine1.x, borderLine1.y, borderLine1.x2, borderLine1.y2, 0, 256) ||
+        is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
+        is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
+        is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
+            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick;
+            isPlayerAlive = false;
+            render();
+            context.drawImage(explosion, player.x + 8, player.y + 8);
+    }
 }
 
 function mainLoop() {
+    if(isPlayerAlive) {
+        document.getElementById("TICKS").innerHTML = "Score: " + tick;
+        tick++;
 
-    document.getElementById("TICKS").innerHTML = "Score: " + tick;
-    tick++;
-
-    update();
-    render();
-    window.requestAnimationFrame(mainLoop);
+        update();
+        render();
+        window.requestAnimationFrame(mainLoop);
+    }
 }
 
 function getMousePos(canvas, evt) {

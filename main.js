@@ -11,7 +11,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var tick = 0;
     var music = new Audio("assets/RayTracer2.mp3");
     var isGameStarted = false;
+    var isPlayerAlive = true;
     var spawnVel = 1;
+    var explosion = new Image();
+    explosion.src = "assets/mediumExplosion2.png";
     function Point(x, y, velX, velY, lines, health, stuck) {
         if (lines === void 0) { lines = []; }
         if (health === void 0) { health = 5; }
@@ -212,13 +215,24 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         });
         bullets = bullets.filter(function (bullet) { return bullet.alive; });
         pointList = pointList.filter(function (point) { return point.alive; });
+        if (is_in_triangle(player.x + 8, player.y + 8, borderLine1.x, borderLine1.y, borderLine1.x2, borderLine1.y2, 0, 256) ||
+            is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
+            is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
+            is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
+            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick;
+            isPlayerAlive = false;
+            render();
+            context.drawImage(explosion, player.x + 8, player.y + 8);
+        }
     }
     function mainLoop() {
-        document.getElementById("TICKS").innerHTML = "Score: " + tick;
-        tick++;
-        update();
-        render();
-        window.requestAnimationFrame(mainLoop);
+        if (isPlayerAlive) {
+            document.getElementById("TICKS").innerHTML = "Score: " + tick;
+            tick++;
+            update();
+            render();
+            window.requestAnimationFrame(mainLoop);
+        }
     }
     function getMousePos(canvas, evt) {
         rect = canvas.getBoundingClientRect();
