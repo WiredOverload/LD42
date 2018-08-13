@@ -3,8 +3,8 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     var ship = (function () {
         function ship() {
-            this.x = 0;
-            this.y = 0;
+            this.x = 800;
+            this.y = 128;
             this.vel = 0;
             this.maxVel = 6;
             this.angle = 0;
