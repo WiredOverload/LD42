@@ -45,7 +45,7 @@ define(["require", "exports"], function (require, exports) {
         ship.prototype.shoot = function () {
             var shootSound = new Audio("./assets/shoot.wav");
             shootSound.play();
-            shootSound.volume = 0.3;
+            shootSound.volume = 0.2;
             return new bullet(this.x, this.y, this.angle);
         };
         return ship;

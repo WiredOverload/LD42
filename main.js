@@ -32,6 +32,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             this.alive = false;
             tick += 180;
             var explodeSound = new Audio("./assets/slink.mp3");
+            explodeSound.volume = 1;
             explodeSound.play();
         };
     }
@@ -223,8 +224,9 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
-            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick;
+            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + " (Click to retry)";
             isPlayerAlive = false;
+            isGameStarted = false;
             render();
             context.drawImage(explosion, player.x + 8, player.y + 8);
         }
@@ -233,8 +235,9 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                 player.x > point.x &&
                 player.y < point.y + 8 &&
                 player.y > point.y) {
-                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick;
+                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + " (Click to retry)";
                 isPlayerAlive = false;
+                isGameStarted = false;
                 render();
                 context.drawImage(explosion, player.x + 8, player.y + 8);
             }
@@ -260,6 +263,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     canvas.onmousedown = function () {
         if (!isGameStarted) {
             isGameStarted = true;
+            reset();
             music.play();
             music.volume = 0.7;
             music.loop = true;
@@ -283,6 +287,19 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
         var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
         return ((u >= 0) && (v >= 0) && (u + v < 1));
+    }
+    function reset() {
+        tick = 0;
+        spawnRate = 60;
+        pointList = [];
+        bullets = [];
+        player = new ship_1.ship();
+        isPlayerAlive = true;
+        tracker = new Point(1020, 128, 0, 0);
+        borderLine1 = new Line(-8, -8, -8, -8);
+        borderLine2 = new Line(-8, -8, -8, -8);
+        borderLine3 = new Line(-8, -8, -8, -8);
+        borderLine4 = new Line(-8, -8, -8, -8);
     }
 });
 //# sourceMappingURL=main.js.map
