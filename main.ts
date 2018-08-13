@@ -240,7 +240,7 @@ function update() {
         tempLines.push(new Line(0, 128, tracker.x, tracker.y));
         spawnVel = borderLine1.x2 < borderLine2.x2 ? (borderLine1.x / 512) + 1 : (borderLine2.x / 512) + 1;
         pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
-        if(tick % (spawnRate * 5) == 0 && spawnRate != 1) {
+        if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
         }
     }
