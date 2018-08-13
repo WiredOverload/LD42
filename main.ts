@@ -28,6 +28,7 @@ function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.health = health;
     this.stuck = stuck;//whether the point is stuck to a wall
     this.lines = lines;//array of lines
+    this.alive = true;
 }
 
 function Line(x, y, x2, y2, health = 1) {
@@ -228,10 +229,11 @@ function update() {
     player.update(mouseX, mouseY);
 
     bullets.forEach(bullet => {
-        bullet.update();
+        bullet.update(pointList);
     });
 
     bullets = bullets.filter(bullet => bullet.alive);
+    pointList = pointList.filter(point => point.alive);
 }
 
 function mainLoop() {
@@ -256,6 +258,7 @@ canvas.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(canvas, evt);
 }, false);
 
-canvas.onclick = function() {
+canvas.onmousedown = function() {
     bullets.push(player.shoot());
+    return false;
 }

@@ -65,15 +65,26 @@ export class bullet {
         this.x = XPos;
         this.y = YPos;
         this.angle = Angle;
-        this.w = 2;
-        this.h = 5;
+        this.w = 8;
+        this.h = 8;
         this.vel = 8;
         this.alive = true;
     }
 
-    update() {
+    update(nodes: any[]) {
         this.x += Math.cos(this.angle) * this.vel;
         this.y += Math.sin(this.angle) * this.vel;
+
+        // projectile collision
+        nodes.forEach(node => {
+            if (node.x < this.x + this.w &&
+            node.x + 8 > this.x &&
+            node.y < this.y + this.h &&
+            8 + node.y > this.y) {
+                node.alive = false;
+            }
+        });
+
         if (this.x > 1024 || this.x < 0) {
             this.alive = false;
         }

@@ -53,14 +53,23 @@ define(["require", "exports"], function (require, exports) {
             this.x = XPos;
             this.y = YPos;
             this.angle = Angle;
-            this.w = 2;
-            this.h = 5;
+            this.w = 8;
+            this.h = 8;
             this.vel = 8;
             this.alive = true;
         }
-        bullet.prototype.update = function () {
+        bullet.prototype.update = function (nodes) {
+            var _this = this;
             this.x += Math.cos(this.angle) * this.vel;
             this.y += Math.sin(this.angle) * this.vel;
+            nodes.forEach(function (node) {
+                if (node.x < _this.x + _this.w &&
+                    node.x + 8 > _this.x &&
+                    node.y < _this.y + _this.h &&
+                    8 + node.y > _this.y) {
+                    node.alive = false;
+                }
+            });
             if (this.x > 1024 || this.x < 0) {
                 this.alive = false;
             }

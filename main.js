@@ -21,6 +21,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.health = health;
         this.stuck = stuck;
         this.lines = lines;
+        this.alive = true;
     }
     function Line(x, y, x2, y2, health) {
         if (health === void 0) { health = 1; }
@@ -198,9 +199,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         pointUpdate();
         player.update(mouseX, mouseY);
         bullets.forEach(function (bullet) {
-            bullet.update();
+            bullet.update(pointList);
         });
         bullets = bullets.filter(function (bullet) { return bullet.alive; });
+        pointList = pointList.filter(function (point) { return point.alive; });
     }
     function mainLoop() {
         document.getElementById("TICKS").innerHTML = "Ticks: " + tick;
@@ -218,8 +220,9 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);
     }, false);
-    canvas.onclick = function () {
+    canvas.onmousedown = function () {
         bullets.push(player.shoot());
+        return false;
     };
 });
 //# sourceMappingURL=main.js.map
