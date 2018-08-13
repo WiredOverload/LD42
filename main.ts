@@ -260,6 +260,17 @@ function update() {
             render();
             context.drawImage(explosion, player.x + 8, player.y + 8);
     }
+    pointList.forEach(point => {
+        if(player.x < point.x + 8 && 
+            player.x > point.x &&
+            player.y < point.y + 8 && 
+            player.y > point.y){
+                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick;
+                isPlayerAlive = false;
+                render();
+                context.drawImage(explosion, player.x + 8, player.y + 8);
+            }
+    });
 }
 
 function mainLoop() {
