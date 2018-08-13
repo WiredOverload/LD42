@@ -27,6 +27,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.pop = function () {
             this.alive = false;
             tick += 180;
+            var explodeSound = new Audio("./assets/explode.wav");
+            explodeSound.play();
         };
     }
     function Line(x, y, x2, y2, health) {

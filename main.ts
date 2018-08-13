@@ -36,6 +36,8 @@ function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.pop = function() {
         this.alive = false;
         tick += 180;
+        var explodeSound = new Audio("./assets/explode.wav");
+        explodeSound.play();
     }
 }
 
