@@ -80,7 +80,8 @@ export class bullet {
             if (node.x < this.x + this.w &&
             node.x + 8 > this.x &&
             node.y < this.y + this.h &&
-            8 + node.y > this.y) {
+            8 + node.y > this.y &&
+            !node.stuck) {
                 node.pop();
             }
         });

@@ -66,7 +66,8 @@ define(["require", "exports"], function (require, exports) {
                 if (node.x < _this.x + _this.w &&
                     node.x + 8 > _this.x &&
                     node.y < _this.y + _this.h &&
-                    8 + node.y > _this.y) {
+                    8 + node.y > _this.y &&
+                    !node.stuck) {
                     node.pop();
                 }
             });
