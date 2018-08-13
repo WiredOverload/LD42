@@ -225,28 +225,14 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
-            if (tick > highScore) {
-                highScore = tick;
-            }
-            document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
-            isPlayerAlive = false;
-            isGameStarted = false;
-            render();
-            context.drawImage(explosion, player.x + 8, player.y + 8);
+            death();
         }
         pointList.forEach(function (point) {
             if (player.x < point.x + 8 &&
                 player.x > point.x &&
                 player.y < point.y + 8 &&
                 player.y > point.y) {
-                if (tick > highScore) {
-                    highScore = tick;
-                }
-                document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
-                isPlayerAlive = false;
-                isGameStarted = false;
-                render();
-                context.drawImage(explosion, player.x + 8, player.y + 8);
+                death();
             }
         });
     }
@@ -259,6 +245,20 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             window.requestAnimationFrame(mainLoop);
         }
     }
+    function death() {
+        if (tick > highScore) {
+            highScore = tick;
+        }
+        document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
+        isPlayerAlive = false;
+        isGameStarted = false;
+        render();
+        context.drawImage(explosion, player.x + 8, player.y + 8);
+        canvas.onmousedown = null;
+        setTimeout(function () {
+            setCanvasClickEvent();
+        }, 2500);
+    }
     function getMousePos(canvas, evt) {
         rect = canvas.getBoundingClientRect();
         mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
@@ -267,20 +267,22 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);
     }, false);
-    canvas.onmousedown = function () {
-        if (!isGameStarted) {
-            isGameStarted = true;
-            reset();
-            music.play();
-            music.volume = 0.7;
-            music.loop = true;
-            window.requestAnimationFrame(mainLoop);
-        }
-        else {
-            bullets.push(player.shoot());
-        }
-        return false;
-    };
+    function setCanvasClickEvent() {
+        canvas.onmousedown = function () {
+            if (!isGameStarted) {
+                isGameStarted = true;
+                reset();
+                music.play();
+                music.volume = 0.7;
+                music.loop = true;
+                window.requestAnimationFrame(mainLoop);
+            }
+            else {
+                bullets.push(player.shoot());
+            }
+            return false;
+        };
+    }
     function is_in_triangle(px, py, ax, ay, bx, by, cx, cy) {
         var v0 = [cx - ax, cy - ay];
         var v1 = [bx - ax, by - ay];
@@ -308,5 +310,6 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         borderLine3 = new Line(-8, -8, -8, -8);
         borderLine4 = new Line(-8, -8, -8, -8);
     }
+    setCanvasClickEvent();
 });
 //# sourceMappingURL=main.js.map
