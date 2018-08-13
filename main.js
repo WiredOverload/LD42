@@ -314,6 +314,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         tick = 0;
         spawnRate = 60;
         pointList = [];
+        deadPoints = [];
         bullets = [];
         player = new ship_1.ship();
         isPlayerAlive = true;

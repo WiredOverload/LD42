@@ -372,6 +372,7 @@ function reset() {
     tick = 0;
     spawnRate = 60;
     pointList = [];
+    deadPoints = [];
     bullets = [];
     player = new ship();
     isPlayerAlive = true;
