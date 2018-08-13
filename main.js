@@ -16,7 +16,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var spawnVel = 1;
     var spawnRate = 60;
     var explosion = new Image();
-    explosion.src = "assets/mediumExplosion2.png";
+    explosion.src = "assets/mediumExplosion3.png";
     function Point(x, y, velX, velY, lines, health, stuck) {
         if (lines === void 0) { lines = []; }
         if (health === void 0) { health = 5; }
@@ -29,6 +29,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.stuck = stuck;
         this.lines = lines;
         this.alive = true;
+        this.explodeTime = 0;
         this.pop = function () {
             this.alive = false;
             tick += 180;
@@ -46,6 +47,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.health = health;
     }
     var pointList = [];
+    var deadPoints = [];
     var tracker = new Point(1020, 128, 0, 0);
     var borderLine1 = new Line(-8, -8, -8, -8);
     var borderLine2 = new Line(-8, -8, -8, -8);
@@ -194,6 +196,9 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             context.fillRect(element.x, element.y, 8, 8);
         });
         player.render(context);
+        deadPoints.forEach(function (point) {
+            context.drawImage(explosion, point.x - 4, point.y - 4);
+        });
         bullets.forEach(function (bullet) {
             bullet.render(context);
         });
@@ -219,7 +224,15 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         bullets.forEach(function (bullet) {
             bullet.update(pointList);
         });
+        pointList.forEach(function (element) {
+            if (!element.alive) {
+                console.log("hey");
+                element.explodeTime = tick;
+                deadPoints.push(element);
+            }
+        });
         bullets = bullets.filter(function (bullet) { return bullet.alive; });
+        deadPoints = deadPoints.filter(function (point) { return point.explodeTime - tick > -12; });
         pointList = pointList.filter(function (point) { return point.alive; });
         if (is_in_triangle(player.x + 8, player.y + 8, borderLine1.x, borderLine1.y, borderLine1.x2, borderLine1.y2, 0, 256) ||
             is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||

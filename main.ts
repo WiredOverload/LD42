@@ -32,7 +32,8 @@ var spawnVel = 1;
 var spawnRate = 60;
 
 var explosion = new Image();
-explosion.src = "assets/mediumExplosion2.png"
+explosion.src = "assets/mediumExplosion3.png";
+
 
 function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.x = x;
@@ -43,6 +44,7 @@ function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
     this.stuck = stuck;//whether the point is stuck to a wall
     this.lines = lines;//array of lines
     this.alive = true;
+    this.explodeTime = 0;
     this.pop = function() {
         this.alive = false;
         tick += 180;
@@ -62,6 +64,7 @@ function Line(x, y, x2, y2, health = 1) {
 
 //list of all points
 var pointList = [];
+var deadPoints = [];
 
 //single point to help find other point positions
 var tracker = new Point(1020, 128, 0, 0)
@@ -226,6 +229,10 @@ function render() {
 
     player.render(context);
 
+    deadPoints.forEach(point => {
+        context.drawImage(explosion, point.x - 4, point.y - 4);
+    });
+
     bullets.forEach(bullet => {
         bullet.render(context);
     });
@@ -256,7 +263,18 @@ function update() {
         bullet.update(pointList);
     });
 
+    pointList.forEach(element =>{
+        if (!element.alive) {
+            console.log("hey");
+            element.explodeTime = tick;
+            deadPoints.push(element);
+        }
+    });
+
     bullets = bullets.filter(bullet => bullet.alive);
+
+    deadPoints = deadPoints.filter(point => point.explodeTime - tick > -12);
+
     pointList = pointList.filter(point => point.alive);
 
     //player death
