@@ -9,6 +9,8 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var mouseY = -10;
     var rect;
     var tick = 0;
+    var music = new Audio("assets/RayTracer.mp3");
+    var isGameStarted = false;
     var spawnVel = 1;
     function Point(x, y, velX, velY, lines, health, stuck) {
         if (lines === void 0) { lines = []; }
@@ -36,7 +38,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         this.health = health;
     }
     var pointList = [];
-    var tracker = new Point(1016, 128, 0, 0);
+    var tracker = new Point(1020, 128, 0, 0);
     var borderLine1 = new Line(-8, -8, -8, -8);
     var borderLine2 = new Line(-8, -8, -8, -8);
     var borderLine3 = new Line(-8, -8, -8, -8);
@@ -90,10 +92,10 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                     var isFarthestUp = true;
                     var isFarthestDown = true;
                     pointList.forEach(function (element2) {
-                        if (element2.stuck == true && element2.x == 1016 && element2.y > element.y) {
+                        if (element2.stuck == true && element2.x == 1016 && element2.y < element.y) {
                             isFarthestUp = false;
                         }
-                        else if (element2.stuck == true && element2.x == 1016 && element2.y < element.y) {
+                        else if (element2.stuck == true && element2.x == 1016 && element2.y > element.y) {
                             isFarthestDown = false;
                         }
                     });
@@ -107,7 +109,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
                         borderLine3 = tempLine;
                     }
                     if (isFarthestDown) {
-                        var tempLine = new Line(element.x, element.y, 0, 0);
+                        var tempLine = new Line(element.x, element.y, 0, 256);
                         element.lines.forEach(function (element2) {
                             if (element2.y2 == 248 && element2.x2 > tempLine.x2) {
                                 tempLine.x2 = element2.x2;
@@ -215,7 +217,6 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         render();
         window.requestAnimationFrame(mainLoop);
     }
-    window.requestAnimationFrame(mainLoop);
     function getMousePos(canvas, evt) {
         rect = canvas.getBoundingClientRect();
         mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
@@ -226,6 +227,12 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     }, false);
     canvas.onmousedown = function () {
         bullets.push(player.shoot());
+        if (!isGameStarted) {
+            isGameStarted = true;
+            music.play();
+            music.loop = true;
+            window.requestAnimationFrame(mainLoop);
+        }
         return false;
     };
 });
