@@ -9,6 +9,8 @@ define(["require", "exports"], function (require, exports) {
             this.maxVel = 6;
             this.angle = 0;
             this.accl = .1;
+            this.draw = new Image();
+            this.draw.src = "assets/ship.png";
         }
         ship.prototype.update = function (mouseX, mouseY) {
             this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
@@ -34,11 +36,9 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         ship.prototype.render = function (context) {
-            var drawing = new Image();
-            drawing.src = "assets/ship.png";
             context.translate(this.x, this.y);
             context.rotate(this.angle + Math.PI / 2);
-            context.drawImage(drawing, -8, -8);
+            context.drawImage(this.draw, -8, -8);
             context.rotate(-(this.angle + Math.PI / 2));
             context.translate(-this.x, -this.y);
         };
@@ -60,6 +60,8 @@ define(["require", "exports"], function (require, exports) {
             this.h = 8;
             this.vel = 8;
             this.alive = true;
+            this.draw = new Image();
+            this.draw.src = "assets/grayLaser.png";
         }
         bullet.prototype.update = function (nodes) {
             var _this = this;
@@ -82,11 +84,9 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         bullet.prototype.render = function (context) {
-            var drawing = new Image();
-            drawing.src = "assets/grayLaser.png";
             context.translate(this.x, this.y);
             context.rotate(this.angle + 3 * Math.PI / 2);
-            context.drawImage(drawing, -4, -8);
+            context.drawImage(this.draw, -4, -8);
             context.rotate(-(this.angle + 3 * Math.PI / 2));
             context.translate(-this.x, -this.y);
         };

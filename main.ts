@@ -301,13 +301,15 @@ canvas.addEventListener('mousemove', function(evt) {
 }, false);
 
 canvas.onmousedown = function() {
-    bullets.push(player.shoot());
     if(!isGameStarted) {
         isGameStarted = true;
         music.play();
         music.volume = 0.7;
         music.loop = true;
         window.requestAnimationFrame(mainLoop);
+    }
+    else {
+        bullets.push(player.shoot());
     }
     return false;
 }

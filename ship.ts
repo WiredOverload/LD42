@@ -5,6 +5,7 @@ export class ship {
     maxVel: number;
     angle: number;
     accl: number;
+    draw: HTMLImageElement;
     constructor() {
         this.x = 800;
         this.y = 128;
@@ -12,6 +13,8 @@ export class ship {
         this.maxVel = 6;
         this.angle = 0;
         this.accl = .1;
+        this.draw = new Image();
+        this.draw.src = "assets/ship.png";
     }
 
     update(mouseX: number, mouseY: number) : void {
@@ -39,11 +42,9 @@ export class ship {
     }
 
     render(context : CanvasRenderingContext2D) : void {
-        var drawing = new Image();
-        drawing.src = "assets/ship.png";
         context.translate(this.x, this.y);
         context.rotate(this.angle + Math.PI/2);
-        context.drawImage(drawing, -8, -8);
+        context.drawImage(this.draw, -8, -8);
         context.rotate(-(this.angle + Math.PI/2));
         context.translate(-this.x, -this.y);
     }
@@ -64,6 +65,7 @@ export class bullet {
     vel: number;
     angle: number;
     alive: boolean;
+    draw: HTMLImageElement;
     constructor(XPos: number, YPos: number, Angle: number) {
         this.x = XPos;
         this.y = YPos;
@@ -72,6 +74,8 @@ export class bullet {
         this.h = 8;
         this.vel = 8;
         this.alive = true;
+        this.draw = new Image();
+        this.draw.src = "assets/grayLaser.png";
     }
 
     update(nodes: any[]) {
@@ -98,11 +102,9 @@ export class bullet {
     }
 
     render(context : CanvasRenderingContext2D) : void {
-        var drawing = new Image();
-        drawing.src = "assets/grayLaser.png";
         context.translate(this.x, this.y);
         context.rotate(this.angle + 3*Math.PI/2);
-        context.drawImage(drawing, -4, -8);
+        context.drawImage(this.draw, -4, -8);
         context.rotate(-(this.angle + 3*Math.PI/2));
         context.translate(-this.x, -this.y);
     }
