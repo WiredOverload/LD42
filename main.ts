@@ -32,7 +32,7 @@ var spawnVel = 1;
 var spawnRate = 60;
 
 var explosion = new Image();
-explosion.src = "assets/mediumExplosion3.png";
+explosion.src = "assets/mediumExplosion4.png";
 
 
 function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {

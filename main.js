@@ -16,7 +16,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var spawnVel = 1;
     var spawnRate = 60;
     var explosion = new Image();
-    explosion.src = "assets/mediumExplosion3.png";
+    explosion.src = "assets/mediumExplosion4.png";
     function Point(x, y, velX, velY, lines, health, stuck) {
         if (lines === void 0) { lines = []; }
         if (health === void 0) { health = 5; }
