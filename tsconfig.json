@@ -10,6 +10,7 @@
     "compileOnSave": true,
     "files": [
         "main.ts",
-        "ship.ts"
+        "ship.ts",
+        "point.ts"
     ]
 }

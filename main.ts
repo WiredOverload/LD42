@@ -4,6 +4,7 @@
 */
 import { ship } from "./ship";
 import { bullet } from "./ship";
+import { Point } from "./Point";
 
 var player = new ship();
 var bullets:bullet[] = [];
@@ -33,26 +34,6 @@ var spawnRate = 60;
 
 var explosion = new Image();
 explosion.src = "assets/mediumExplosion4.png";
-
-
-function Point(x, y, velX, velY, lines = [], health = 5, stuck = false) {
-    this.x = x;
-    this.y = y;
-    this.velX = velX;
-    this.velY = velY;
-    this.health = health;
-    this.stuck = stuck;//whether the point is stuck to a wall
-    this.lines = lines;//array of lines
-    this.alive = true;
-    this.explodeTime = 0;
-    this.pop = function() {
-        this.alive = false;
-        tick += 180;
-        var explodeSound = new Audio("./assets/slink.mp3");
-        explodeSound.volume = 1;
-        explodeSound.play();
-    }
-}
 
 function Line(x, y, x2, y2, health = 1) {
     this.x = x;

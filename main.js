@@ -1,4 +1,4 @@
-define(["require", "exports", "./ship"], function (require, exports, ship_1) {
+define(["require", "exports", "./ship", "./Point"], function (require, exports, ship_1, Point_1) {
     "use strict";
     exports.__esModule = true;
     var player = new ship_1.ship();
@@ -17,27 +17,6 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     var spawnRate = 60;
     var explosion = new Image();
     explosion.src = "assets/mediumExplosion4.png";
-    function Point(x, y, velX, velY, lines, health, stuck) {
-        if (lines === void 0) { lines = []; }
-        if (health === void 0) { health = 5; }
-        if (stuck === void 0) { stuck = false; }
-        this.x = x;
-        this.y = y;
-        this.velX = velX;
-        this.velY = velY;
-        this.health = health;
-        this.stuck = stuck;
-        this.lines = lines;
-        this.alive = true;
-        this.explodeTime = 0;
-        this.pop = function () {
-            this.alive = false;
-            tick += 180;
-            var explodeSound = new Audio("./assets/slink.mp3");
-            explodeSound.volume = 1;
-            explodeSound.play();
-        };
-    }
     function Line(x, y, x2, y2, health) {
         if (health === void 0) { health = 1; }
         this.x = x;
@@ -48,7 +27,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
     }
     var pointList = [];
     var deadPoints = [];
-    var tracker = new Point(1020, 128, 0, 0);
+    var tracker = new Point_1.Point(1020, 128, 0, 0);
     var borderLine1 = new Line(-8, -8, -8, -8);
     var borderLine2 = new Line(-8, -8, -8, -8);
     var borderLine3 = new Line(-8, -8, -8, -8);
@@ -214,7 +193,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
             });
             tempLines.push(new Line(0, 128, tracker.x, tracker.y));
             spawnVel = borderLine1.x2 < borderLine2.x2 ? (borderLine1.x / 512) + 1 : (borderLine2.x / 512) + 1;
-            pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
+            pointList.push(new Point_1.Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
             if (tick % (spawnRate * 5) == 0 && spawnRate != 5) {
                 spawnRate--;
             }
@@ -318,7 +297,7 @@ define(["require", "exports", "./ship"], function (require, exports, ship_1) {
         bullets = [];
         player = new ship_1.ship();
         isPlayerAlive = true;
-        tracker = new Point(1020, 128, 0, 0);
+        tracker = new Point_1.Point(1020, 128, 0, 0);
         borderLine1 = new Line(-8, -8, -8, -8);
         borderLine2 = new Line(-8, -8, -8, -8);
         borderLine3 = new Line(-8, -8, -8, -8);
