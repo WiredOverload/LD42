@@ -16,6 +16,8 @@
         "Point.ts",
         "Line.ts",
         "Shadow.ts",
+        "IUpdatable.ts",
+        "IRenderable.ts",
         "ICollidable.ts",
     ]
 }

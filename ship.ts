@@ -21,7 +21,7 @@ export class Ship implements ICollidable {
         this.accl = .1;
         this.draw = new Image();
         this.draw.src = "assets/ship.png";
-        this.collideGroup = CollideGroup.Player;
+        this.collideGroup = CollideGroup.Ship;
         this.collidesWith = CollideGroup.Point || CollideGroup.Shadow;
     }
 

@@ -3,6 +3,8 @@
  * Add CheckCollison free function for collision between all entities with ICollidable
  * Add GetAABB to ICollidable (get's entity's width and height)
  * NO MAGIC NUMBERS -> every entity should have width and height, so all the + 8 crap has to go
+ * give all local vars types
+ * fix scoring point system
 */
 import { Ship } from "./ship";
 import { Bullet } from "./Bullet";

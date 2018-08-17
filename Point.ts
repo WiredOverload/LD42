@@ -28,7 +28,7 @@ export class Point implements ICollidable {
         this.explodeTime = 0;
         this.explodeSound = new Audio("./assets/slink.mp3");
         this.collideGroup = CollideGroup.Point;
-        this.collidesWith = CollideGroup.Bullet || CollideGroup.Player;
+        this.collidesWith = CollideGroup.Bullet || CollideGroup.Ship;
     }
 
     update(pointList: Point[], shadow: Shadow) : void {

@@ -15,7 +15,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             this.explodeTime = 0;
             this.explodeSound = new Audio("./assets/slink.mp3");
             this.collideGroup = ICollidable_1.CollideGroup.Point;
-            this.collidesWith = ICollidable_1.CollideGroup.Bullet || ICollidable_1.CollideGroup.Player;
+            this.collidesWith = ICollidable_1.CollideGroup.Bullet || ICollidable_1.CollideGroup.Ship;
         }
         Point.prototype.update = function (pointList, shadow) {
             var _this = this;

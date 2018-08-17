@@ -11,7 +11,7 @@ define(["require", "exports", "./Bullet", "./ICollidable"], function (require, e
             this.accl = .1;
             this.draw = new Image();
             this.draw.src = "assets/ship.png";
-            this.collideGroup = ICollidable_1.CollideGroup.Player;
+            this.collideGroup = ICollidable_1.CollideGroup.Ship;
             this.collidesWith = ICollidable_1.CollideGroup.Point || ICollidable_1.CollideGroup.Shadow;
         }
         Ship.prototype.update = function (mouseX, mouseY) {
