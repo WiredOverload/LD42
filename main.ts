@@ -81,28 +81,13 @@ function render() {
     context.lineTo(0, 256);
     context.fill();
 
-    pointList.forEach(element => {
-        if(element.lines) {
-            element.lines.forEach(element2 => {
-                context.beginPath();
-                context.moveTo(element2.x + 4, element2.y + 4);
-                if(element2.y2 == 0) {
-                    context.lineTo(element2.x2 + 4, element2.y2);
-                }
-                else {
-                    context.lineTo(element2.x2 + 4, element2.y2 + 8);
-                }
-                if(element2.x2 == 1020 && element2.y2 == 128) {
-                    context.strokeStyle="#FFFFFF";
-                }
-                else {
-                    context.strokeStyle="#000000";
-                }
-                context.stroke();
+    pointList.forEach(point => {
+        if(point.lines) {
+            point.lines.forEach(line => {
+                line.render(context);
             });
         }
-        context.fillStyle = "#000000";//4800FF
-        context.fillRect(element.x, element.y, 8, 8);
+        point.render(context);
     });
 
     player.render(context);
@@ -145,7 +130,6 @@ function update() {
 
     pointList.forEach(element =>{
         if (!element.alive) {
-            console.log("hey");
             element.explodeTime = tick;
             deadPoints.push(element);
         }

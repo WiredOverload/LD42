@@ -51,28 +51,13 @@ define(["require", "exports", "./ship", "./Point", "./Line"], function (require,
         context.lineTo(borderLines[3].x2 + 4, borderLines[3].y2);
         context.lineTo(0, 256);
         context.fill();
-        pointList.forEach(function (element) {
-            if (element.lines) {
-                element.lines.forEach(function (element2) {
-                    context.beginPath();
-                    context.moveTo(element2.x + 4, element2.y + 4);
-                    if (element2.y2 == 0) {
-                        context.lineTo(element2.x2 + 4, element2.y2);
-                    }
-                    else {
-                        context.lineTo(element2.x2 + 4, element2.y2 + 8);
-                    }
-                    if (element2.x2 == 1020 && element2.y2 == 128) {
-                        context.strokeStyle = "#FFFFFF";
-                    }
-                    else {
-                        context.strokeStyle = "#000000";
-                    }
-                    context.stroke();
+        pointList.forEach(function (point) {
+            if (point.lines) {
+                point.lines.forEach(function (line) {
+                    line.render(context);
                 });
             }
-            context.fillStyle = "#000000";
-            context.fillRect(element.x, element.y, 8, 8);
+            point.render(context);
         });
         player.render(context);
         deadPoints.forEach(function (point) {
@@ -107,7 +92,6 @@ define(["require", "exports", "./ship", "./Point", "./Line"], function (require,
         });
         pointList.forEach(function (element) {
             if (!element.alive) {
-                console.log("hey");
                 element.explodeTime = tick;
                 deadPoints.push(element);
             }

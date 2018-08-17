@@ -49,7 +49,7 @@ export class Ship implements ICollidable {
         }
     }
 
-    render(context : CanvasRenderingContext2D) : void {
+    render(context: CanvasRenderingContext2D) : void {
         context.translate(this.x, this.y);
         context.rotate(this.angle + Math.PI/2);
         context.drawImage(this.draw, -8, -8);

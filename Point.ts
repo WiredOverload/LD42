@@ -30,7 +30,7 @@ export class Point implements ICollidable {
         this.collidesWith = CollideGroup.Bullet || CollideGroup.Player;
     }
 
-    update(pointList: Point[], borderLines: Line[]) {
+    update(pointList: Point[], borderLines: Line[]) : void {
         if(!this.stuck) {
             this.x += this.velX;
             this.y += this.velY;
@@ -125,8 +125,13 @@ export class Point implements ICollidable {
         });
     }
 
+    render(context: CanvasRenderingContext2D) : void {
+        context.fillStyle = "#000000";//4800FF
+        context.fillRect(this.x, this.y, 8, 8);
+    }
+
     // TODO: rename "pop"
-    pop() {
+    pop() : void {
         this.alive = false;
         // tick += 180; // TODO: Pull in reference to score / tick counter so "popping" will add to score
         this.explodeSound.volume = 1;

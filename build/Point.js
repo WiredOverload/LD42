@@ -110,6 +110,10 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                 point.y = _this.y;
             });
         };
+        Point.prototype.render = function (context) {
+            context.fillStyle = "#000000";
+            context.fillRect(this.x, this.y, 8, 8);
+        };
         Point.prototype.pop = function () {
             this.alive = false;
             this.explodeSound.volume = 1;
