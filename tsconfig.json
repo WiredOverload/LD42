@@ -11,7 +11,7 @@
     "compileOnSave": true,
     "files": [
         "main.ts",
-        "Ship.ts",
+        "Player.ts",
         "Bullet.ts",
         "Point.ts",
         "Line.ts",

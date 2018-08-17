@@ -6,13 +6,13 @@
  * give all local vars types
  * fix scoring point system
 */
-import { Ship } from "./ship";
+import { Player } from "./Player";
 import { Bullet } from "./Bullet";
 import { Point } from "./Point";
 import { Line } from "./Line";
 import { Shadow } from "./Shadow";
 
-var player = new Ship();
+var player = new Player();
 var shadow = new Shadow();
 var bullets:Bullet[] = [];
 
@@ -43,6 +43,7 @@ var explosion = new Image();
 explosion.src = "assets/mediumExplosion4.png";
 
 //list of all points
+var elements:object[] = [];
 var pointList:Point[] = [];
 var deadPoints:Point[] = [];
 
@@ -58,11 +59,6 @@ function render() {
     shadow.render(context);
 
     pointList.forEach(point => {
-        if(point.lines) {
-            point.lines.forEach(line => {
-                line.render(context);
-            });
-        }
         point.render(context);
     });
 
@@ -191,7 +187,7 @@ function reset() {
     pointList = [];
     deadPoints = [];
     bullets = [];
-    player = new Ship();
+    player = new Player();
     isPlayerAlive = true;
     tracker = new Point(1020, 128, 0, 0);
     shadow = new Shadow();

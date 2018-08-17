@@ -1,5 +1,5 @@
 export interface IRenderable {
-    render() : void;
+    render(context: CanvasRenderingContext2D) : void;
 }
 
 export function isRenderable(obj: object) : obj is IRenderable {

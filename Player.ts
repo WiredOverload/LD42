@@ -1,8 +1,9 @@
 import { Bullet } from "./Bullet";
 import { ICollidable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
+import { IRenderable } from "./IRenderable";
 
-export class Ship implements ICollidable {
+export class Player implements IRenderable, ICollidable {
     x: number;
     y: number;
     vel: number;

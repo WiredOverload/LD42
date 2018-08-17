@@ -111,6 +111,11 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             });
         };
         Point.prototype.render = function (context) {
+            if (this.lines) {
+                this.lines.forEach(function (line) {
+                    line.render(context);
+                });
+            }
             context.fillStyle = "#000000";
             context.fillRect(this.x, this.y, 8, 8);
         };

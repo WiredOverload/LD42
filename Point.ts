@@ -1,9 +1,10 @@
 import { Line } from "./Line";
+import { IRenderable } from "./IRenderable";
 import { ICollidable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
 import { Shadow } from "./Shadow";
 
-export class Point implements ICollidable {
+export class Point implements IRenderable, ICollidable {
     x: number;
     y: number;
     velX: number;
@@ -127,6 +128,12 @@ export class Point implements ICollidable {
     }
 
     render(context: CanvasRenderingContext2D) : void {
+        if(this.lines) {
+            this.lines.forEach(line => {
+                line.render(context);
+            });
+        }
+
         context.fillStyle = "#000000";//4800FF
         context.fillRect(this.x, this.y, 8, 8);
     }

@@ -1,7 +1,7 @@
-define(["require", "exports", "./ship", "./Point", "./Line", "./Shadow"], function (require, exports, ship_1, Point_1, Line_1, Shadow_1) {
+define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1) {
     "use strict";
     exports.__esModule = true;
-    var player = new ship_1.Ship();
+    var player = new Player_1.Player();
     var shadow = new Shadow_1.Shadow();
     var bullets = [];
     var canvas = document.getElementById("imgCanvas");
@@ -18,6 +18,7 @@ define(["require", "exports", "./ship", "./Point", "./Line", "./Shadow"], functi
     var spawnRate = 60;
     var explosion = new Image();
     explosion.src = "assets/mediumExplosion4.png";
+    var elements = [];
     var pointList = [];
     var deadPoints = [];
     var tracker = new Point_1.Point(1020, 128, 0, 0);
@@ -27,11 +28,6 @@ define(["require", "exports", "./ship", "./Point", "./Line", "./Shadow"], functi
         context.fillRect(0, 0, canvas.width, canvas.height);
         shadow.render(context);
         pointList.forEach(function (point) {
-            if (point.lines) {
-                point.lines.forEach(function (line) {
-                    line.render(context);
-                });
-            }
             point.render(context);
         });
         player.render(context);
@@ -139,7 +135,7 @@ define(["require", "exports", "./ship", "./Point", "./Line", "./Shadow"], functi
         pointList = [];
         deadPoints = [];
         bullets = [];
-        player = new ship_1.Ship();
+        player = new Player_1.Player();
         isPlayerAlive = true;
         tracker = new Point_1.Point(1020, 128, 0, 0);
         shadow = new Shadow_1.Shadow();
