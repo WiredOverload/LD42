@@ -37,114 +37,18 @@ var explosion = new Image();
 explosion.src = "assets/mediumExplosion4.png";
 
 //list of all points
-var pointList = [];
-var deadPoints = [];
+var pointList:Point[] = [];
+var deadPoints:Point[] = [];
 
 //single point to help find other point positions
 var tracker = new Point(1020, 128, 0, 0)
 
-var borderLine1 = new Line(-8, -8, -8, -8);//top to bottom
-var borderLine2 = new Line(-8, -8, -8, -8);//bottom to top
-var borderLine3 = new Line(-8, -8, -8, -8);//right to top
-var borderLine4 = new Line(-8, -8, -8, -8);//right to bottom
-
-function pointUpdate() {
-    pointList.forEach(element => {
-        if(!element.stuck) {
-            element.x += element.velX;
-            element.y += element.velY;
-
-            if(element.y <= 0) {
-                element.y = 0;
-                element.stuck = true;
-                var isFarthest:boolean = true;
-                pointList.forEach(element2 => {
-                    if(element2.stuck == true && element2.y == 0 && element2.x > element.x) {
-                        isFarthest = false;
-                    }
-                });
-                if(isFarthest) {
-                    var tempLine = new Line(element.x, element.y, 0, 248);
-                    element.lines.forEach(element2 => {
-                        if(element2.y2 == 248 && element2.x2 > tempLine.x2) {
-                            tempLine.x2 = element2.x2;
-                        }
-                    });
-                    borderLine1 = tempLine;
-                }
-            }
-            else if(element.y >= 248) {
-                element.y = 248;
-                element.stuck = true;
-                var isFarthest:boolean = true;
-                pointList.forEach(element2 => {
-                    if(element2.stuck == true && element2.y == 248 && element2.x > element.x) {
-                        isFarthest = false;
-                    }
-                });
-                if(isFarthest) {
-                    var tempLine = new Line(element.x, element.y, 0, 0);
-                    element.lines.forEach(element2 => {
-                        if(element2.y2 == 0 && element2.x2 > tempLine.x2) {
-                            tempLine.x2 = element2.x2;
-                        }
-                    });
-                    borderLine2 = tempLine;
-                }
-            }
-            else if(element.x >= 1016) {//change to losing game
-                element.x = 1016;
-                element.stuck = true;
-                var isFarthestUp:boolean = true;
-                var isFarthestDown:boolean = true;
-                pointList.forEach(element2 => {
-                    if(element2.stuck == true && element2.x == 1016 && element2.y < element.y) {
-                        isFarthestUp = false;
-                    }
-                    else if(element2.stuck == true && element2.x == 1016 && element2.y > element.y) {
-                        isFarthestDown = false;
-                    }
-                });
-                if(isFarthestUp) {
-                    var tempLine = new Line(element.x, element.y, 0, 0);
-                    element.lines.forEach(element2 => {
-                        if(element2.y2 == 0 && element2.x2 > tempLine.x2) {
-                            tempLine.x2 = element2.x2;
-                        }
-                    });
-                    borderLine3 = tempLine;
-                }
-                if(isFarthestDown) {
-                    var tempLine = new Line(element.x, element.y, 0, 256);
-                    element.lines.forEach(element2 => {
-                        if(element2.y2 == 248 && element2.x2 > tempLine.x2) {
-                            tempLine.x2 = element2.x2;
-                        }
-                    });
-                    borderLine4 = tempLine;
-                }
-            }
-        }
-        else {
-            //point deletion
-            if(element.y == 0) {
-                if(element.x < borderLine1.x - 64) {
-                    pointList.splice(pointList.indexOf(element), 1);
-                }
-            }
-            else {
-                if(element.x < borderLine2.x - 64) {
-                    pointList.splice(pointList.indexOf(element), 1);
-                }
-            }
-        }
-        element.lines.forEach(element2 => {
-            element2.x = element.x;
-            element2.y = element.y;
-
-        });
-    });
-}
+var borderLines:Line[] = [
+    new Line(-8, -8, -8, -8),//top to bottom
+    new Line(-8, -8, -8, -8),//bottom to top
+    new Line(-8, -8, -8, -8),//right to top
+    new Line(-8, -8, -8, -8),//right to bottom
+]
 
 function render() {
     context.strokeStyle="#000000";
@@ -156,24 +60,24 @@ function render() {
     context.fillStyle="#000000";//#800000
     context.beginPath();
     context.moveTo(0, 0);
-    context.lineTo(borderLine1.x + 4, borderLine1.y);
-    context.lineTo(borderLine1.x2 + 4, borderLine1.y2 + 8);
+    context.lineTo(borderLines[0].x + 4, borderLines[0].y);
+    context.lineTo(borderLines[0].x2 + 4, borderLines[0].y2 + 8);
     context.lineTo(0, 256);
     context.fill();
 
     context.beginPath();
     context.moveTo(0, 256);
-    context.lineTo(borderLine2.x + 4, borderLine2.y + 8);
-    context.lineTo(borderLine2.x2 + 4, borderLine2.y2);
+    context.lineTo(borderLines[1].x + 4, borderLines[1].y + 8);
+    context.lineTo(borderLines[1].x2 + 4, borderLines[1].y2);
     context.lineTo(0, 0);
     context.fill();
 
     context.beginPath();
     context.moveTo(0, 0);
-    context.lineTo(borderLine3.x2 + 4, borderLine3.y2);
-    context.lineTo(borderLine3.x + 8, borderLine3.y + 4);
-    context.lineTo(borderLine4.x + 8, borderLine4.y + 4);
-    context.lineTo(borderLine4.x2 + 4, borderLine4.y2);
+    context.lineTo(borderLines[2].x2 + 4, borderLines[2].y2);
+    context.lineTo(borderLines[2].x + 8, borderLines[2].y + 4);
+    context.lineTo(borderLines[3].x + 8, borderLines[3].y + 4);
+    context.lineTo(borderLines[3].x2 + 4, borderLines[3].y2);
     context.lineTo(0, 256);
     context.fill();
 
@@ -222,14 +126,16 @@ function update() {
             }
         });
         tempLines.push(new Line(0, 128, tracker.x, tracker.y));
-        spawnVel = borderLine1.x2 < borderLine2.x2 ? (borderLine1.x / 512) + 1 : (borderLine2.x / 512) + 1;
+        spawnVel = borderLines[0].x2 < borderLines[1].x2 ? (borderLines[0].x / 512) + 1 : (borderLines[1].x / 512) + 1;
         pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
         if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
         }
     }
 
-    pointUpdate();
+    pointList.forEach(point => {
+        point.update(pointList, borderLines);
+    });
 
     player.update(mouseX, mouseY);
 
@@ -252,10 +158,10 @@ function update() {
     pointList = pointList.filter(point => point.alive);
 
     //player death
-    if(is_in_triangle(player.x + 8, player.y + 8, borderLine1.x, borderLine1.y, borderLine1.x2, borderLine1.y2, 0, 256) ||
-        is_in_triangle(player.x + 8, player.y + 8, borderLine2.x, borderLine2.y, borderLine2.x2, borderLine2.y2, 0, 0) ||
-        is_in_triangle(player.x + 8, player.y + 8, borderLine3.x, borderLine3.y, borderLine3.x2, borderLine3.y2, 0, 256) ||
-        is_in_triangle(player.x + 8, player.y + 8, borderLine4.x, borderLine4.y, borderLine4.x2, borderLine4.y2, 0, 0)) {
+    if(is_in_triangle(player.x + 8, player.y + 8, borderLines[0].x, borderLines[0].y, borderLines[0].x2, borderLines[0].y2, 0, 256) ||
+        is_in_triangle(player.x + 8, player.y + 8, borderLines[1].x, borderLines[1].y, borderLines[1].x2, borderLines[1].y2, 0, 0) ||
+        is_in_triangle(player.x + 8, player.y + 8, borderLines[2].x, borderLines[2].y, borderLines[2].x2, borderLines[2].y2, 0, 256) ||
+        is_in_triangle(player.x + 8, player.y + 8, borderLines[3].x, borderLines[3].y, borderLines[3].x2, borderLines[3].y2, 0, 0)) {
         death();
     }
     pointList.forEach(point => {
@@ -351,10 +257,10 @@ function reset() {
     player = new Ship();
     isPlayerAlive = true;
     tracker = new Point(1020, 128, 0, 0)
-    borderLine1 = new Line(-8, -8, -8, -8);//top to bottom
-    borderLine2 = new Line(-8, -8, -8, -8);//bottom to top
-    borderLine3 = new Line(-8, -8, -8, -8);//right to top
-    borderLine4 = new Line(-8, -8, -8, -8);//right to bottom
+    borderLines[0] = new Line(-8, -8, -8, -8);//top to bottom
+    borderLines[1] = new Line(-8, -8, -8, -8);//bottom to top
+    borderLines[2] = new Line(-8, -8, -8, -8);//right to top
+    borderLines[3] = new Line(-8, -8, -8, -8);//right to bottom
 }
 
 setCanvasClickEvent();

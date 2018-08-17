@@ -30,6 +30,101 @@ export class Point implements ICollidable {
         this.collidesWith = CollideGroup.Bullet || CollideGroup.Player;
     }
 
+    update(pointList: Point[], borderLines: Line[]) {
+        if(!this.stuck) {
+            this.x += this.velX;
+            this.y += this.velY;
+
+            if(this.y <= 0) {
+                this.y = 0;
+                this.stuck = true;
+                var isFarthest:boolean = true;
+                pointList.forEach(point => {
+                    if(point.stuck == true && point.y == 0 && point.x > this.x) {
+                        isFarthest = false;
+                    }
+                });
+                if(isFarthest) {
+                    var tempLine = new Line(this.x, this.y, 0, 248);
+                    this.lines.forEach(point => {
+                        if(point.y2 == 248 && point.x2 > tempLine.x2) {
+                            tempLine.x2 = point.x2;
+                        }
+                    });
+                    borderLines[0] = tempLine;
+                }
+            }
+            else if(this.y >= 248) {
+                this.y = 248;
+                this.stuck = true;
+                var isFarthest:boolean = true;
+                pointList.forEach(point => {
+                    if(point.stuck == true && point.y == 248 && point.x > this.x) {
+                        isFarthest = false;
+                    }
+                });
+                if(isFarthest) {
+                    var tempLine = new Line(this.x, this.y, 0, 0);
+                    this.lines.forEach(point => {
+                        if(point.y2 == 0 && point.x2 > tempLine.x2) {
+                            tempLine.x2 = point.x2;
+                        }
+                    });
+                    borderLines[1] = tempLine;
+                }
+            }
+            else if(this.x >= 1016) {//change to losing game
+                this.x = 1016;
+                this.stuck = true;
+                var isFarthestUp:boolean = true;
+                var isFarthestDown:boolean = true;
+                pointList.forEach(point => {
+                    if(point.stuck == true && point.x == 1016 && point.y < this.y) {
+                        isFarthestUp = false;
+                    }
+                    else if(point.stuck == true && point.x == 1016 && point.y > this.y) {
+                        isFarthestDown = false;
+                    }
+                });
+                if(isFarthestUp) {
+                    var tempLine = new Line(this.x, this.y, 0, 0);
+                    this.lines.forEach(point => {
+                        if(point.y2 == 0 && point.x2 > tempLine.x2) {
+                            tempLine.x2 = point.x2;
+                        }
+                    });
+                    borderLines[2] = tempLine;
+                }
+                if(isFarthestDown) {
+                    var tempLine = new Line(this.x, this.y, 0, 256);
+                    this.lines.forEach(point => {
+                        if(point.y2 == 248 && point.x2 > tempLine.x2) {
+                            tempLine.x2 = point.x2;
+                        }
+                    });
+                    borderLines[3] = tempLine;
+                }
+            }
+        }
+        else {
+            //point deletion
+            if(this.y == 0) {
+                if(this.x < borderLines[0].x - 64) {
+                    pointList.splice(pointList.indexOf(this), 1);
+                }
+            }
+            else {
+                if(this.x < borderLines[1].x - 64) {
+                    pointList.splice(pointList.indexOf(this), 1);
+                }
+            }
+        }
+        this.lines.forEach(point => {
+            point.x = this.x;
+            point.y = this.y;
+        });
+    }
+
     // TODO: rename "pop"
     pop() {
         this.alive = false;
