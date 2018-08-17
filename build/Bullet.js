@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./ICollidable"], function (require, exports, ICollidable_1) {
     "use strict";
     exports.__esModule = true;
     var Bullet = (function () {
@@ -12,6 +12,8 @@ define(["require", "exports"], function (require, exports) {
             this.alive = true;
             this.draw = new Image();
             this.draw.src = "assets/grayLaser.png";
+            this.collideGroup = ICollidable_1.CollideGroup.Bullet;
+            this.collidesWith = ICollidable_1.CollideGroup.Point;
         }
         Bullet.prototype.update = function (nodes) {
             var _this = this;

@@ -1,4 +1,7 @@
-export class Bullet {
+import { ICollidable } from "./ICollidable";
+import { CollideGroup } from "./ICollidable";
+
+export class Bullet implements ICollidable {
     x: number;
     y: number;
     w: number;
@@ -7,6 +10,8 @@ export class Bullet {
     angle: number;
     alive: boolean;
     draw: HTMLImageElement;
+    collideGroup: CollideGroup;
+    collidesWith: CollideGroup;
     constructor(XPos: number, YPos: number, Angle: number) {
         this.x = XPos;
         this.y = YPos;
@@ -17,6 +22,8 @@ export class Bullet {
         this.alive = true;
         this.draw = new Image();
         this.draw.src = "assets/grayLaser.png";
+        this.collideGroup = CollideGroup.Bullet;
+        this.collidesWith = CollideGroup.Point;
     }
 
     update(nodes: any[]) {

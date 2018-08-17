@@ -15,5 +15,6 @@
         "Bullet.ts",
         "Point.ts",
         "Line.ts",
+        "ICollidable.ts",
     ]
 }

@@ -1,4 +1,4 @@
-define(["require", "exports", "./Bullet"], function (require, exports, Bullet_1) {
+define(["require", "exports", "./Bullet", "./ICollidable"], function (require, exports, Bullet_1, ICollidable_1) {
     "use strict";
     exports.__esModule = true;
     var Ship = (function () {
@@ -11,6 +11,8 @@ define(["require", "exports", "./Bullet"], function (require, exports, Bullet_1)
             this.accl = .1;
             this.draw = new Image();
             this.draw.src = "assets/ship.png";
+            this.collideGroup = ICollidable_1.CollideGroup.Player;
+            this.collidesWith = ICollidable_1.CollideGroup.Point || ICollidable_1.CollideGroup.Shadow;
         }
         Ship.prototype.update = function (mouseX, mouseY) {
             this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);

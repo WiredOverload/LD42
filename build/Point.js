@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./ICollidable"], function (require, exports, ICollidable_1) {
     "use strict";
     exports.__esModule = true;
     var Point = (function () {
@@ -14,6 +14,8 @@ define(["require", "exports"], function (require, exports) {
             this.alive = true;
             this.explodeTime = 0;
             this.explodeSound = new Audio("./assets/slink.mp3");
+            this.collideGroup = ICollidable_1.CollideGroup.Point;
+            this.collidesWith = ICollidable_1.CollideGroup.Bullet || ICollidable_1.CollideGroup.Player;
         }
         Point.prototype.pop = function () {
             this.alive = false;

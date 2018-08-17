@@ -1,6 +1,8 @@
 import { Bullet } from "./Bullet";
+import { ICollidable } from "./ICollidable";
+import { CollideGroup } from "./ICollidable";
 
-export class Ship {
+export class Ship implements ICollidable {
     x: number;
     y: number;
     vel: number;
@@ -8,6 +10,8 @@ export class Ship {
     angle: number;
     accl: number;
     draw: HTMLImageElement;
+    collideGroup: CollideGroup;
+    collidesWith: CollideGroup;
     constructor() {
         this.x = 800;
         this.y = 128;
@@ -17,6 +21,8 @@ export class Ship {
         this.accl = .1;
         this.draw = new Image();
         this.draw.src = "assets/ship.png";
+        this.collideGroup = CollideGroup.Player;
+        this.collidesWith = CollideGroup.Point || CollideGroup.Shadow;
     }
 
     update(mouseX: number, mouseY: number) : void {
