@@ -6,8 +6,10 @@ import { Ship } from "./ship";
 import { Bullet } from "./Bullet";
 import { Point } from "./Point";
 import { Line } from "./Line";
+import { Shadow } from "./Shadow";
 
 var player = new Ship();
+var shadow = new Shadow();
 var bullets:Bullet[] = [];
 
 //canvas creation
@@ -41,14 +43,7 @@ var pointList:Point[] = [];
 var deadPoints:Point[] = [];
 
 //single point to help find other point positions
-var tracker = new Point(1020, 128, 0, 0)
-
-var borderLines:Line[] = [
-    new Line(-8, -8, -8, -8),//top to bottom
-    new Line(-8, -8, -8, -8),//bottom to top
-    new Line(-8, -8, -8, -8),//right to top
-    new Line(-8, -8, -8, -8),//right to bottom
-]
+var tracker = new Point(1020, 128, 0, 0);
 
 function render() {
     context.strokeStyle="#000000";
@@ -56,30 +51,7 @@ function render() {
     context.fillRect(0, 0, canvas.width, canvas.height);
     //context.clearRect(0, 0, canvas.width, canvas.height);
 
-    //context.strokeStyle="#FF0000";
-    context.fillStyle="#000000";//#800000
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(borderLines[0].x + 4, borderLines[0].y);
-    context.lineTo(borderLines[0].x2 + 4, borderLines[0].y2 + 8);
-    context.lineTo(0, 256);
-    context.fill();
-
-    context.beginPath();
-    context.moveTo(0, 256);
-    context.lineTo(borderLines[1].x + 4, borderLines[1].y + 8);
-    context.lineTo(borderLines[1].x2 + 4, borderLines[1].y2);
-    context.lineTo(0, 0);
-    context.fill();
-
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(borderLines[2].x2 + 4, borderLines[2].y2);
-    context.lineTo(borderLines[2].x + 8, borderLines[2].y + 4);
-    context.lineTo(borderLines[3].x + 8, borderLines[3].y + 4);
-    context.lineTo(borderLines[3].x2 + 4, borderLines[3].y2);
-    context.lineTo(0, 256);
-    context.fill();
+    shadow.render(context);
 
     pointList.forEach(point => {
         if(point.lines) {
@@ -111,7 +83,7 @@ function update() {
             }
         });
         tempLines.push(new Line(0, 128, tracker.x, tracker.y));
-        spawnVel = borderLines[0].x2 < borderLines[1].x2 ? (borderLines[0].x / 512) + 1 : (borderLines[1].x / 512) + 1;
+        spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;
         pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
         if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
@@ -119,7 +91,7 @@ function update() {
     }
 
     pointList.forEach(point => {
-        point.update(pointList, borderLines);
+        point.update(pointList, shadow);
     });
 
     player.update(mouseX, mouseY);
@@ -142,10 +114,10 @@ function update() {
     pointList = pointList.filter(point => point.alive);
 
     //player death
-    if(is_in_triangle(player.x + 8, player.y + 8, borderLines[0].x, borderLines[0].y, borderLines[0].x2, borderLines[0].y2, 0, 256) ||
-        is_in_triangle(player.x + 8, player.y + 8, borderLines[1].x, borderLines[1].y, borderLines[1].x2, borderLines[1].y2, 0, 0) ||
-        is_in_triangle(player.x + 8, player.y + 8, borderLines[2].x, borderLines[2].y, borderLines[2].x2, borderLines[2].y2, 0, 256) ||
-        is_in_triangle(player.x + 8, player.y + 8, borderLines[3].x, borderLines[3].y, borderLines[3].x2, borderLines[3].y2, 0, 0)) {
+    if(is_in_triangle(player.x + 8, player.y + 8, shadow.topToBottomLine.x, shadow.topToBottomLine.y, shadow.topToBottomLine.x2, shadow.topToBottomLine.y2, 0, 256) ||
+        is_in_triangle(player.x + 8, player.y + 8, shadow.bottomToTopLine.x, shadow.bottomToTopLine.y, shadow.bottomToTopLine.x2, shadow.bottomToTopLine.y2, 0, 0) ||
+        is_in_triangle(player.x + 8, player.y + 8, shadow.rightToTopLine.x, shadow.rightToTopLine.y, shadow.rightToTopLine.x2, shadow.rightToTopLine.y2, 0, 256) ||
+        is_in_triangle(player.x + 8, player.y + 8, shadow.rightToBottomLine.x, shadow.rightToBottomLine.y, shadow.rightToBottomLine.x2, shadow.rightToBottomLine.y2, 0, 0)) {
         death();
     }
     pointList.forEach(point => {
@@ -240,11 +212,8 @@ function reset() {
     bullets = [];
     player = new Ship();
     isPlayerAlive = true;
-    tracker = new Point(1020, 128, 0, 0)
-    borderLines[0] = new Line(-8, -8, -8, -8);//top to bottom
-    borderLines[1] = new Line(-8, -8, -8, -8);//bottom to top
-    borderLines[2] = new Line(-8, -8, -8, -8);//right to top
-    borderLines[3] = new Line(-8, -8, -8, -8);//right to bottom
+    tracker = new Point(1020, 128, 0, 0);
+    shadow = new Shadow();
 }
 
 setCanvasClickEvent();

@@ -17,7 +17,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             this.collideGroup = ICollidable_1.CollideGroup.Point;
             this.collidesWith = ICollidable_1.CollideGroup.Bullet || ICollidable_1.CollideGroup.Player;
         }
-        Point.prototype.update = function (pointList, borderLines) {
+        Point.prototype.update = function (pointList, shadow) {
             var _this = this;
             if (!this.stuck) {
                 this.x += this.velX;
@@ -38,7 +38,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        borderLines[0] = tempLine;
+                        shadow.topToBottomLine = tempLine;
                     }
                 }
                 else if (this.y >= 248) {
@@ -57,7 +57,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        borderLines[1] = tempLine;
+                        shadow.bottomToTopLine = tempLine;
                     }
                 }
                 else if (this.x >= 1016) {
@@ -80,7 +80,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        borderLines[2] = tempLine;
+                        shadow.rightToTopLine = tempLine;
                     }
                     if (isFarthestDown) {
                         var tempLine = new Line_1.Line(this.x, this.y, 0, 256);
@@ -89,18 +89,18 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        borderLines[3] = tempLine;
+                        shadow.rightToBottomLine = tempLine;
                     }
                 }
             }
             else {
                 if (this.y == 0) {
-                    if (this.x < borderLines[0].x - 64) {
+                    if (this.x < shadow.topToBottomLine.x - 64) {
                         pointList.splice(pointList.indexOf(this), 1);
                     }
                 }
                 else {
-                    if (this.x < borderLines[1].x - 64) {
+                    if (this.x < shadow.bottomToTopLine.x - 64) {
                         pointList.splice(pointList.indexOf(this), 1);
                     }
                 }

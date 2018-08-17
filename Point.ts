@@ -1,6 +1,7 @@
 import { Line } from "./Line";
 import { ICollidable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
+import { Shadow } from "./Shadow";
 
 export class Point implements ICollidable {
     x: number;
@@ -30,7 +31,7 @@ export class Point implements ICollidable {
         this.collidesWith = CollideGroup.Bullet || CollideGroup.Player;
     }
 
-    update(pointList: Point[], borderLines: Line[]) : void {
+    update(pointList: Point[], shadow: Shadow) : void {
         if(!this.stuck) {
             this.x += this.velX;
             this.y += this.velY;
@@ -51,7 +52,7 @@ export class Point implements ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    borderLines[0] = tempLine;
+                    shadow.topToBottomLine = tempLine;
                 }
             }
             else if(this.y >= 248) {
@@ -70,7 +71,7 @@ export class Point implements ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    borderLines[1] = tempLine;
+                    shadow.bottomToTopLine = tempLine;
                 }
             }
             else if(this.x >= 1016) {//change to losing game
@@ -93,7 +94,7 @@ export class Point implements ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    borderLines[2] = tempLine;
+                    shadow.rightToTopLine = tempLine;
                 }
                 if(isFarthestDown) {
                     var tempLine = new Line(this.x, this.y, 0, 256);
@@ -102,19 +103,19 @@ export class Point implements ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    borderLines[3] = tempLine;
+                    shadow.rightToBottomLine = tempLine;
                 }
             }
         }
         else {
             //point deletion
             if(this.y == 0) {
-                if(this.x < borderLines[0].x - 64) {
+                if(this.x < shadow.topToBottomLine.x - 64) {
                     pointList.splice(pointList.indexOf(this), 1);
                 }
             }
             else {
-                if(this.x < borderLines[1].x - 64) {
+                if(this.x < shadow.bottomToTopLine.x - 64) {
                     pointList.splice(pointList.indexOf(this), 1);
                 }
             }

@@ -1,7 +1,8 @@
-define(["require", "exports", "./ship", "./Point", "./Line"], function (require, exports, ship_1, Point_1, Line_1) {
+define(["require", "exports", "./ship", "./Point", "./Line", "./Shadow"], function (require, exports, ship_1, Point_1, Line_1, Shadow_1) {
     "use strict";
     exports.__esModule = true;
     var player = new ship_1.Ship();
+    var shadow = new Shadow_1.Shadow();
     var bullets = [];
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
@@ -20,37 +21,11 @@ define(["require", "exports", "./ship", "./Point", "./Line"], function (require,
     var pointList = [];
     var deadPoints = [];
     var tracker = new Point_1.Point(1020, 128, 0, 0);
-    var borderLines = [
-        new Line_1.Line(-8, -8, -8, -8),
-        new Line_1.Line(-8, -8, -8, -8),
-        new Line_1.Line(-8, -8, -8, -8),
-        new Line_1.Line(-8, -8, -8, -8),
-    ];
     function render() {
         context.strokeStyle = "#000000";
         context.fillStyle = "lightgrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#000000";
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(borderLines[0].x + 4, borderLines[0].y);
-        context.lineTo(borderLines[0].x2 + 4, borderLines[0].y2 + 8);
-        context.lineTo(0, 256);
-        context.fill();
-        context.beginPath();
-        context.moveTo(0, 256);
-        context.lineTo(borderLines[1].x + 4, borderLines[1].y + 8);
-        context.lineTo(borderLines[1].x2 + 4, borderLines[1].y2);
-        context.lineTo(0, 0);
-        context.fill();
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(borderLines[2].x2 + 4, borderLines[2].y2);
-        context.lineTo(borderLines[2].x + 8, borderLines[2].y + 4);
-        context.lineTo(borderLines[3].x + 8, borderLines[3].y + 4);
-        context.lineTo(borderLines[3].x2 + 4, borderLines[3].y2);
-        context.lineTo(0, 256);
-        context.fill();
+        shadow.render(context);
         pointList.forEach(function (point) {
             if (point.lines) {
                 point.lines.forEach(function (line) {
@@ -77,14 +52,14 @@ define(["require", "exports", "./ship", "./Point", "./Line"], function (require,
                 }
             });
             tempLines.push(new Line_1.Line(0, 128, tracker.x, tracker.y));
-            spawnVel = borderLines[0].x2 < borderLines[1].x2 ? (borderLines[0].x / 512) + 1 : (borderLines[1].x / 512) + 1;
+            spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;
             pointList.push(new Point_1.Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
             if (tick % (spawnRate * 5) == 0 && spawnRate != 5) {
                 spawnRate--;
             }
         }
         pointList.forEach(function (point) {
-            point.update(pointList, borderLines);
+            point.update(pointList, shadow);
         });
         player.update(mouseX, mouseY);
         bullets.forEach(function (bullet) {
@@ -99,10 +74,10 @@ define(["require", "exports", "./ship", "./Point", "./Line"], function (require,
         bullets = bullets.filter(function (bullet) { return bullet.alive; });
         deadPoints = deadPoints.filter(function (point) { return point.explodeTime - tick > -12; });
         pointList = pointList.filter(function (point) { return point.alive; });
-        if (is_in_triangle(player.x + 8, player.y + 8, borderLines[0].x, borderLines[0].y, borderLines[0].x2, borderLines[0].y2, 0, 256) ||
-            is_in_triangle(player.x + 8, player.y + 8, borderLines[1].x, borderLines[1].y, borderLines[1].x2, borderLines[1].y2, 0, 0) ||
-            is_in_triangle(player.x + 8, player.y + 8, borderLines[2].x, borderLines[2].y, borderLines[2].x2, borderLines[2].y2, 0, 256) ||
-            is_in_triangle(player.x + 8, player.y + 8, borderLines[3].x, borderLines[3].y, borderLines[3].x2, borderLines[3].y2, 0, 0)) {
+        if (is_in_triangle(player.x + 8, player.y + 8, shadow.topToBottomLine.x, shadow.topToBottomLine.y, shadow.topToBottomLine.x2, shadow.topToBottomLine.y2, 0, 256) ||
+            is_in_triangle(player.x + 8, player.y + 8, shadow.bottomToTopLine.x, shadow.bottomToTopLine.y, shadow.bottomToTopLine.x2, shadow.bottomToTopLine.y2, 0, 0) ||
+            is_in_triangle(player.x + 8, player.y + 8, shadow.rightToTopLine.x, shadow.rightToTopLine.y, shadow.rightToTopLine.x2, shadow.rightToTopLine.y2, 0, 256) ||
+            is_in_triangle(player.x + 8, player.y + 8, shadow.rightToBottomLine.x, shadow.rightToBottomLine.y, shadow.rightToBottomLine.x2, shadow.rightToBottomLine.y2, 0, 0)) {
             death();
         }
         pointList.forEach(function (point) {
@@ -184,10 +159,7 @@ define(["require", "exports", "./ship", "./Point", "./Line"], function (require,
         player = new ship_1.Ship();
         isPlayerAlive = true;
         tracker = new Point_1.Point(1020, 128, 0, 0);
-        borderLines[0] = new Line_1.Line(-8, -8, -8, -8);
-        borderLines[1] = new Line_1.Line(-8, -8, -8, -8);
-        borderLines[2] = new Line_1.Line(-8, -8, -8, -8);
-        borderLines[3] = new Line_1.Line(-8, -8, -8, -8);
+        shadow = new Shadow_1.Shadow();
     }
     setCanvasClickEvent();
 });
