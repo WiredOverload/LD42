@@ -2,12 +2,13 @@
  * 
  * 
 */
-import { ship } from "./ship";
-import { bullet } from "./ship";
+import { Ship } from "./ship";
+import { Bullet } from "./Bullet";
 import { Point } from "./Point";
+import { Line } from "./Line";
 
-var player = new ship();
-var bullets:bullet[] = [];
+var player = new Ship();
+var bullets:Bullet[] = [];
 
 //canvas creation
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
@@ -34,14 +35,6 @@ var spawnRate = 60;
 
 var explosion = new Image();
 explosion.src = "assets/mediumExplosion4.png";
-
-function Line(x, y, x2, y2, health = 1) {
-    this.x = x;
-    this.y = y;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.health = health;
-}
 
 //list of all points
 var pointList = [];
@@ -355,7 +348,7 @@ function reset() {
     pointList = [];
     deadPoints = [];
     bullets = [];
-    player = new ship();
+    player = new Ship();
     isPlayerAlive = true;
     tracker = new Point(1020, 128, 0, 0)
     borderLine1 = new Line(-8, -8, -8, -8);//top to bottom

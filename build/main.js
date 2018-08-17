@@ -1,7 +1,7 @@
-define(["require", "exports", "./ship", "./Point"], function (require, exports, ship_1, Point_1) {
+define(["require", "exports", "./ship", "./Point", "./Line"], function (require, exports, ship_1, Point_1, Line_1) {
     "use strict";
     exports.__esModule = true;
-    var player = new ship_1.ship();
+    var player = new ship_1.Ship();
     var bullets = [];
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
@@ -17,21 +17,13 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
     var spawnRate = 60;
     var explosion = new Image();
     explosion.src = "assets/mediumExplosion4.png";
-    function Line(x, y, x2, y2, health) {
-        if (health === void 0) { health = 1; }
-        this.x = x;
-        this.y = y;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.health = health;
-    }
     var pointList = [];
     var deadPoints = [];
     var tracker = new Point_1.Point(1020, 128, 0, 0);
-    var borderLine1 = new Line(-8, -8, -8, -8);
-    var borderLine2 = new Line(-8, -8, -8, -8);
-    var borderLine3 = new Line(-8, -8, -8, -8);
-    var borderLine4 = new Line(-8, -8, -8, -8);
+    var borderLine1 = new Line_1.Line(-8, -8, -8, -8);
+    var borderLine2 = new Line_1.Line(-8, -8, -8, -8);
+    var borderLine3 = new Line_1.Line(-8, -8, -8, -8);
+    var borderLine4 = new Line_1.Line(-8, -8, -8, -8);
     function pointUpdate() {
         pointList.forEach(function (element) {
             if (!element.stuck) {
@@ -47,7 +39,7 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
                         }
                     });
                     if (isFarthest) {
-                        var tempLine = new Line(element.x, element.y, 0, 248);
+                        var tempLine = new Line_1.Line(element.x, element.y, 0, 248);
                         element.lines.forEach(function (element2) {
                             if (element2.y2 == 248 && element2.x2 > tempLine.x2) {
                                 tempLine.x2 = element2.x2;
@@ -66,7 +58,7 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
                         }
                     });
                     if (isFarthest) {
-                        var tempLine = new Line(element.x, element.y, 0, 0);
+                        var tempLine = new Line_1.Line(element.x, element.y, 0, 0);
                         element.lines.forEach(function (element2) {
                             if (element2.y2 == 0 && element2.x2 > tempLine.x2) {
                                 tempLine.x2 = element2.x2;
@@ -89,7 +81,7 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
                         }
                     });
                     if (isFarthestUp) {
-                        var tempLine = new Line(element.x, element.y, 0, 0);
+                        var tempLine = new Line_1.Line(element.x, element.y, 0, 0);
                         element.lines.forEach(function (element2) {
                             if (element2.y2 == 0 && element2.x2 > tempLine.x2) {
                                 tempLine.x2 = element2.x2;
@@ -98,7 +90,7 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
                         borderLine3 = tempLine;
                     }
                     if (isFarthestDown) {
-                        var tempLine = new Line(element.x, element.y, 0, 256);
+                        var tempLine = new Line_1.Line(element.x, element.y, 0, 256);
                         element.lines.forEach(function (element2) {
                             if (element2.y2 == 248 && element2.x2 > tempLine.x2) {
                                 tempLine.x2 = element2.x2;
@@ -188,10 +180,10 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
             var tempLines = [];
             pointList.forEach(function (element) {
                 if (element.stuck) {
-                    tempLines.push(new Line(0, 128, element.x, element.y));
+                    tempLines.push(new Line_1.Line(0, 128, element.x, element.y));
                 }
             });
-            tempLines.push(new Line(0, 128, tracker.x, tracker.y));
+            tempLines.push(new Line_1.Line(0, 128, tracker.x, tracker.y));
             spawnVel = borderLine1.x2 < borderLine2.x2 ? (borderLine1.x / 512) + 1 : (borderLine2.x / 512) + 1;
             pointList.push(new Point_1.Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
             if (tick % (spawnRate * 5) == 0 && spawnRate != 5) {
@@ -295,13 +287,13 @@ define(["require", "exports", "./ship", "./Point"], function (require, exports, 
         pointList = [];
         deadPoints = [];
         bullets = [];
-        player = new ship_1.ship();
+        player = new ship_1.Ship();
         isPlayerAlive = true;
         tracker = new Point_1.Point(1020, 128, 0, 0);
-        borderLine1 = new Line(-8, -8, -8, -8);
-        borderLine2 = new Line(-8, -8, -8, -8);
-        borderLine3 = new Line(-8, -8, -8, -8);
-        borderLine4 = new Line(-8, -8, -8, -8);
+        borderLine1 = new Line_1.Line(-8, -8, -8, -8);
+        borderLine2 = new Line_1.Line(-8, -8, -8, -8);
+        borderLine3 = new Line_1.Line(-8, -8, -8, -8);
+        borderLine4 = new Line_1.Line(-8, -8, -8, -8);
     }
     setCanvasClickEvent();
 });

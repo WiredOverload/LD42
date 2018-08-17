@@ -4,13 +4,16 @@
         "noImplicitAny": false,
         "removeComments": true,
         "preserveConstEnums": true,
+        "outDir": "build/",
         "sourceMap": true,
         "watch": true,
     },
     "compileOnSave": true,
     "files": [
         "main.ts",
-        "ship.ts",
-        "point.ts"
+        "Ship.ts",
+        "Bullet.ts",
+        "Point.ts",
+        "Line.ts",
     ]
 }
