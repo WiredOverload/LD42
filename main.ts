@@ -1,6 +1,8 @@
 /*TODO:
- * 
- * 
+ * Clean up stuff that will remain in main
+ * Add CheckCollison free function for collision between all entities with ICollidable
+ * Add GetAABB to ICollidable (get's entity's width and height)
+ * NO MAGIC NUMBERS -> every entity should have width and height, so all the + 8 crap has to go
 */
 import { Ship } from "./ship";
 import { Bullet } from "./Bullet";
@@ -83,7 +85,7 @@ function update() {
             }
         });
         tempLines.push(new Line(0, 128, tracker.x, tracker.y));
-        spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;
+        spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;// the hell is this
         pointList.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
         if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
@@ -114,12 +116,11 @@ function update() {
     pointList = pointList.filter(point => point.alive);
 
     //player death
-    if(is_in_triangle(player.x + 8, player.y + 8, shadow.topToBottomLine.x, shadow.topToBottomLine.y, shadow.topToBottomLine.x2, shadow.topToBottomLine.y2, 0, 256) ||
-        is_in_triangle(player.x + 8, player.y + 8, shadow.bottomToTopLine.x, shadow.bottomToTopLine.y, shadow.bottomToTopLine.x2, shadow.bottomToTopLine.y2, 0, 0) ||
-        is_in_triangle(player.x + 8, player.y + 8, shadow.rightToTopLine.x, shadow.rightToTopLine.y, shadow.rightToTopLine.x2, shadow.rightToTopLine.y2, 0, 256) ||
-        is_in_triangle(player.x + 8, player.y + 8, shadow.rightToBottomLine.x, shadow.rightToBottomLine.y, shadow.rightToBottomLine.x2, shadow.rightToBottomLine.y2, 0, 0)) {
+    if (shadow.consumePlayer(player)) {
         death();
     }
+
+    //free function "checkCollision" will handle this
     pointList.forEach(point => {
         if(player.x < point.x + 8 && 
             player.x > point.x &&
@@ -134,7 +135,6 @@ function mainLoop() {
     if(isPlayerAlive) {
         document.getElementById("TICKS").innerHTML = "Score: " + tick;
         tick++;
-
         update();
         render();
         window.requestAnimationFrame(mainLoop);
@@ -181,27 +181,6 @@ function setCanvasClickEvent() {
         }
         return false;
     }
-}
-
-function is_in_triangle (px,py,ax,ay,bx,by,cx,cy){
-    //credit: http://www.blackpawn.com/texts/pointinpoly/default.html
-    
-    var v0 = [cx-ax,cy-ay];
-    var v1 = [bx-ax,by-ay];
-    var v2 = [px-ax,py-ay];
-    
-    var dot00 = (v0[0]*v0[0]) + (v0[1]*v0[1]);
-    var dot01 = (v0[0]*v1[0]) + (v0[1]*v1[1]);
-    var dot02 = (v0[0]*v2[0]) + (v0[1]*v2[1]);
-    var dot11 = (v1[0]*v1[0]) + (v1[1]*v1[1]);
-    var dot12 = (v1[0]*v2[0]) + (v1[1]*v2[1]);
-    
-    var invDenom = 1/ (dot00 * dot11 - dot01 * dot01);
-    
-    var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-    var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-    
-    return ((u >= 0) && (v >= 0) && (u + v < 1));
 }
 
 function reset() {
