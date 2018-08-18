@@ -17,7 +17,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             this.explodeTime = 0;
             this.explodeSound = new Audio("./assets/slink.mp3");
             this.collideGroup = ICollidable_1.CollideGroup.Point;
-            this.collidesWith = ICollidable_1.CollideGroup.Bullet || ICollidable_1.CollideGroup.Ship;
+            this.collidesWith = [ICollidable_1.CollideGroup.Bullet, ICollidable_1.CollideGroup.Player];
         }
         Point.prototype.update = function (params) {
             var _this = this;
@@ -121,10 +121,12 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             context.fillStyle = "#000000";
             context.fillRect(this.x, this.y, 8, 8);
         };
-        Point.prototype.pop = function () {
-            this.alive = false;
-            this.explodeSound.volume = 1;
-            this.explodeSound.play();
+        Point.prototype.destroy = function () {
+            if (!this.stuck) {
+                this.alive = false;
+                this.explodeSound.volume = 1;
+                this.explodeSound.play();
+            }
         };
         return Point;
     }());

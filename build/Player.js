@@ -14,8 +14,8 @@ define(["require", "exports", "./Bullet", "./ICollidable"], function (require, e
             this.accl = .1;
             this.draw = new Image();
             this.draw.src = "assets/ship.png";
-            this.collideGroup = ICollidable_1.CollideGroup.Ship;
-            this.collidesWith = ICollidable_1.CollideGroup.Point || ICollidable_1.CollideGroup.Shadow;
+            this.collideGroup = ICollidable_1.CollideGroup.Player;
+            this.collidesWith = [ICollidable_1.CollideGroup.Point, ICollidable_1.CollideGroup.Shadow];
         }
         Player.prototype.update = function () {
             this.angle = Math.atan2(this.mouseY - this.y, this.mouseX - this.x);
@@ -52,6 +52,9 @@ define(["require", "exports", "./Bullet", "./ICollidable"], function (require, e
             shootSound.play();
             shootSound.volume = 0.2;
             return new Bullet_1.Bullet(this.x, this.y, this.angle);
+        };
+        Player.prototype.destroy = function () {
+            this.alive = false;
         };
         return Player;
     }());

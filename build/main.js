@@ -1,19 +1,18 @@
-define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1) {
+define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable", "./ICollidable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1, ICollidable_1) {
     "use strict";
     exports.__esModule = true;
-    var player = new Player_1.Player();
-    var shadow = new Shadow_1.Shadow();
-    var entities = [];
-    entities.push(player);
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
     var mouseX = -10;
     var mouseY = -10;
     var rect;
+    var player = new Player_1.Player();
+    var shadow = new Shadow_1.Shadow();
+    var entities = [];
+    entities.push(player);
     var tick = 0;
     var music = new Audio("assets/RayTracer2.mp3");
     var isGameStarted = false;
-    var isPlayerAlive = true;
     var highScore = 0;
     var spawnVel = 1;
     var spawnRate = 60;
@@ -59,13 +58,19 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                     tempLines.push(new Line_1.Line(0, 128, entity.x, entity.y));
                 }
             }
+            if (ICollidable_1.isCollidable(entity)) {
+                ICollidable_1.checkCollision(entity, entities);
+            }
+            ;
         });
-        if (shadow.consumePlayer(player)) {
+        entities = entities.filter(function (entity) { return ICollidable_1.isAlive(entity); });
+        shadow.consumePlayer(player);
+        if (!player.alive) {
             death();
         }
     }
     function mainLoop() {
-        if (isPlayerAlive) {
+        if (player.alive) {
             document.getElementById("TICKS").innerHTML = "Score: " + tick;
             tick++;
             update();
@@ -78,7 +83,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
             highScore = tick;
         }
         document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
-        isPlayerAlive = false;
         isGameStarted = false;
         render();
         context.drawImage(explosion, player.x + 8, player.y + 8);
@@ -118,7 +122,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
         spawnRate = 60;
         deadPoints = [];
         player = new Player_1.Player();
-        isPlayerAlive = true;
         tracker = new Point_1.Point(1020, 128, 0, 0);
         shadow = new Shadow_1.Shadow();
         entities = [];

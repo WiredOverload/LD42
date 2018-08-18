@@ -19,7 +19,7 @@ export class Point implements IUpdatable, IRenderable, ICollidable {
     explodeTime: number;
     explodeSound: HTMLAudioElement;
     collideGroup: CollideGroup;
-    collidesWith: CollideGroup;
+    collidesWith: CollideGroup[];
     constructor(X: number, Y: number, VelX: number, VelY: number, Lines = []) {
         this.x = X;
         this.y = Y;
@@ -34,11 +34,13 @@ export class Point implements IUpdatable, IRenderable, ICollidable {
         this.explodeTime = 0;
         this.explodeSound = new Audio("./assets/slink.mp3");
         this.collideGroup = CollideGroup.Point;
-        this.collidesWith = CollideGroup.Bullet || CollideGroup.Ship;
+        this.collidesWith = [CollideGroup.Bullet, CollideGroup.Player];
     }
 
+    // TODO (WiredOverload): clean this up
     // separate out to mult functions!!
-    // would be nice if we could implement IUpdatable here
+    // want to avoid this "params: any" parameter for all IUpdatable entities
+    // Line updates and Point updates should be completely separate even though they are related!!
     update(params: any) : void {
         if(!this.stuck) {
             this.x += this.velX;
@@ -145,11 +147,12 @@ export class Point implements IUpdatable, IRenderable, ICollidable {
         context.fillRect(this.x, this.y, 8, 8);
     }
 
-    // TODO: rename "pop"
-    pop() : void {
-        this.alive = false;
-        // tick += 180; // TODO: Pull in reference to score / tick counter so "popping" will add to score
-        this.explodeSound.volume = 1;
-        this.explodeSound.play();
+    destroy() : void {
+        if (!this.stuck) {
+            this.alive = false;
+            // tick += 180; // TODO: Pull in reference to score / tick counter so "destroying" Points will add to score
+            this.explodeSound.volume = 1;
+            this.explodeSound.play();
+        }
     }
 }

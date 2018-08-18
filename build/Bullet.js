@@ -13,7 +13,7 @@ define(["require", "exports", "./ICollidable"], function (require, exports, ICol
             this.draw = new Image();
             this.draw.src = "assets/grayLaser.png";
             this.collideGroup = ICollidable_1.CollideGroup.Bullet;
-            this.collidesWith = ICollidable_1.CollideGroup.Point;
+            this.collidesWith = [ICollidable_1.CollideGroup.Point];
         }
         Bullet.prototype.update = function () {
             this.x += Math.cos(this.angle) * this.vel;
@@ -31,6 +31,8 @@ define(["require", "exports", "./ICollidable"], function (require, exports, ICol
             context.drawImage(this.draw, -4, -8);
             context.rotate(-(this.angle + 3 * Math.PI / 2));
             context.translate(-this.x, -this.y);
+        };
+        Bullet.prototype.destroy = function () {
         };
         return Bullet;
     }());

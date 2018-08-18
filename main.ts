@@ -1,10 +1,11 @@
 /*TODO:
  * Clean up stuff that will remain in main
- * Add CheckCollison free function for collision between all entities with ICollidable
- * Add GetAABB to ICollidable (get's entity's width and height)
+ * Clean up Point update function
+ * ^ Line updates and Point updates should be completely separate even though they are related
  * NO MAGIC NUMBERS -> every entity should have width and height, so all the + 8 crap has to go
  * give all local vars types
  * fix scoring point system
+ * add "explosion" class
 */
 import { Player } from "./Player";
 import { Bullet } from "./Bullet";
@@ -13,30 +14,24 @@ import { Line } from "./Line";
 import { Shadow } from "./Shadow";
 import { isRenderable } from "./IRenderable";
 import { isUpdatable } from "./IUpdatable";
+import { isCollidable, checkCollision, isAlive } from "./ICollidable";
 
-var player = new Player();
-var shadow = new Shadow();
-// var bullets:Bullet[] = [];
-var entities:object[] = [];
-entities.push(player);
-// entities.push(shadow);
+// scene set up
 
-//canvas creation
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
 var context = canvas.getContext("2d");
 var mouseX = -10;
 var mouseY = -10;
 var rect;
 
-//game tick increases constantly
+var player = new Player();
+var shadow = new Shadow();
+var entities:object[] = [];
+entities.push(player);
+
 var tick = 0;
-
 var music = new Audio("assets/RayTracer2.mp3");
-
 var isGameStarted:boolean = false;
-
-var isPlayerAlive:boolean = true;
-
 var highScore = 0;
 
 //spawned point speed
@@ -47,8 +42,7 @@ var spawnRate = 60;
 var explosion = new Image();
 explosion.src = "assets/mediumExplosion4.png";
 
-//list of all points
-// var pointList:Point[] = [];
+//list of all dead points
 var deadPoints:Point[] = [];
 
 //single point to help find other point positions
@@ -61,15 +55,10 @@ function render() {
 
     shadow.render(context);
 
-    // pointList.forEach(point => {
-    //     point.render(context);
-    // });
-
     deadPoints.forEach(point => {
         context.drawImage(explosion, point.x - 4, point.y - 4);
     });
 
-    // global elements code:
     entities.forEach(entity => {
         if (isRenderable(entity)) {
             entity.render(context);
@@ -81,15 +70,18 @@ render();
 function update() {
     var tempLines:Line[] = [];
 
+    // TODO (WiredOverload): clean this up
     if(tick % spawnRate == 0) {
         tempLines.push(new Line(0, 128, tracker.x, tracker.y));
         spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;// the hell is this
         entities.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
+
         if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
         }
     }
 
+    // TODO (WiredOverload): Make sure we don't have to pass in these tempParams anymore
     // temporary till we solve Point Update method
     var tempParams = {
         entities: entities,
@@ -101,44 +93,31 @@ function update() {
             entity.update(tempParams);
         }
 
-            if (entity instanceof Point) {
-                if (entity.stuck) {
-                    tempLines.push(new Line(0, 128, entity.x, entity.y));
-                }
+        if (entity instanceof Point) {
+            if (entity.stuck) {
+                tempLines.push(new Line(0, 128, entity.x, entity.y));
             }
+        }
+
+        if (isCollidable(entity)) {
+            checkCollision(entity, entities);
+        };
     });
-
-    // pointList.forEach(element =>{
-    //     if (!element.alive) {
-    //         element.explodeTime = tick;
-    //         deadPoints.push(element);
-    //     }
-    // });
-
-    // bullets = bullets.filter(bullet => bullet.alive);
 
     // deadPoints = deadPoints.filter(point => point.explodeTime - tick > -12);
 
-    // pointList = pointList.filter(point => point.alive);
+    entities = entities.filter(entity => isAlive(entity));
 
     //player death
-    if (shadow.consumePlayer(player)) {
+    shadow.consumePlayer(player);
+
+    if (!player.alive) {
         death();
     }
-
-    //free function "checkCollision" will handle this
-    // pointList.forEach(point => {
-    //     if(player.x < point.x + 8 && 
-    //         player.x > point.x &&
-    //         player.y < point.y + 8 && 
-    //         player.y > point.y){
-    //         death();
-    //     }
-    // });
 }
 
 function mainLoop() {
-    if(isPlayerAlive) {
+    if (player.alive) {
         document.getElementById("TICKS").innerHTML = "Score: " + tick;
         tick++;
         update();
@@ -152,7 +131,6 @@ function death() {
         highScore = tick;
     }
     document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
-    isPlayerAlive = false;
     isGameStarted = false;
     render();
     context.drawImage(explosion, player.x + 8, player.y + 8);
@@ -185,8 +163,6 @@ function setCanvasClickEvent() {
             window.requestAnimationFrame(mainLoop);
         }
         else {
-            // bullets.push(player.shoot());
-            //global elements code:
             entities.push(player.shoot());
         }
         return false;
@@ -196,18 +172,12 @@ function setCanvasClickEvent() {
 function reset() {
     tick = 0;
     spawnRate = 60;
-    // pointList = [];
     deadPoints = [];
-    // bullets = [];
     player = new Player();
-    isPlayerAlive = true;
     tracker = new Point(1020, 128, 0, 0);
-
-    // global elements code:
     shadow = new Shadow();
     entities = [];
     entities.push(player);
-    // entities.push(shadow);
 }
 
 setCanvasClickEvent();

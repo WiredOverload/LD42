@@ -36,10 +36,7 @@ define(["require", "exports", "./Line"], function (require, exports, Line_1) {
                 this.is_in_triangle(player.x + 8, player.y + 8, this.bottomToTopLine.x, this.bottomToTopLine.y, this.bottomToTopLine.x2, this.bottomToTopLine.y2, 0, 0) ||
                 this.is_in_triangle(player.x + 8, player.y + 8, this.rightToTopLine.x, this.rightToTopLine.y, this.rightToTopLine.x2, this.rightToTopLine.y2, 0, 256) ||
                 this.is_in_triangle(player.x + 8, player.y + 8, this.rightToBottomLine.x, this.rightToBottomLine.y, this.rightToBottomLine.x2, this.rightToBottomLine.y2, 0, 0)) {
-                return true;
-            }
-            else {
-                return false;
+                player.destroy();
             }
         };
         Shadow.prototype.is_in_triangle = function (px, py, ax, ay, bx, by, cx, cy) {

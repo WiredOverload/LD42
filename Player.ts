@@ -18,7 +18,7 @@ export class Player implements IUpdatable, IRenderable, ICollidable {
     draw: HTMLImageElement;
     alive: boolean;
     collideGroup: CollideGroup;
-    collidesWith: CollideGroup;
+    collidesWith: CollideGroup[];
     constructor() {
         this.x = 800;
         this.y = 128;
@@ -31,8 +31,8 @@ export class Player implements IUpdatable, IRenderable, ICollidable {
         this.accl = .1;
         this.draw = new Image();
         this.draw.src = "assets/ship.png";
-        this.collideGroup = CollideGroup.Ship;
-        this.collidesWith = CollideGroup.Point || CollideGroup.Shadow;
+        this.collideGroup = CollideGroup.Player;
+        this.collidesWith = [CollideGroup.Point, CollideGroup.Shadow];
     }
 
     update() : void {
@@ -72,5 +72,9 @@ export class Player implements IUpdatable, IRenderable, ICollidable {
         shootSound.play();
         shootSound.volume = 0.2;
         return new Bullet(this.x, this.y, this.angle);
+    }
+
+    destroy() : void {
+        this.alive = false;
     }
 }

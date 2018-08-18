@@ -1,16 +1,9 @@
 export enum CollideGroup {
-    Ship,
+    Player,
     Bullet,
     Point,
     Shadow,
 }
-
-// export class AABB {
-//     x: number;
-//     y: number;
-//     height: number;
-//     width: number;
-// }
 
 export interface ICollidable {
     x: number;
@@ -19,9 +12,8 @@ export interface ICollidable {
     height: number;
     alive: boolean;
     collideGroup: CollideGroup;
-    collidesWith: CollideGroup;
-    // getAABB() : AABB;
-    // destroy() : void;
+    collidesWith: CollideGroup[];
+    destroy() : void;
 }
 
 export function isCollidable(obj: object) : obj is ICollidable {
@@ -33,6 +25,40 @@ export function isCollidable(obj: object) : obj is ICollidable {
             && collidableObj.height !== undefined
             && collidableObj.alive !== undefined
             &&collidableObj.collideGroup !== undefined
-            && collidableObj.collidesWith !== undefined);
+            && collidableObj.collidesWith !== undefined
+            && collidableObj.destroy !== undefined);
             // etc.
+}
+
+export function isAlive(obj: object) : obj is ICollidable {
+    var collidableObj : ICollidable = <ICollidable>obj;
+    
+    return (collidableObj.x !== undefined
+            && collidableObj.y !== undefined
+            && collidableObj.width !== undefined
+            && collidableObj.height !== undefined
+            && collidableObj.alive !== undefined
+            &&collidableObj.collideGroup !== undefined
+            && collidableObj.collidesWith !== undefined
+            && collidableObj.destroy !== undefined
+            // alive check
+            && collidableObj.alive === true);
+}
+
+export function checkCollision(collider: ICollidable, entities: object[]) : void {
+    entities.forEach(entity => {
+        if (isCollidable(entity)) {
+            if (entity.x < collider.x + collider.width &&
+                entity.x + entity.width > collider.x &&
+                entity.y < collider.y + collider.height &&
+                entity.height + entity.y > collider.y)
+            {
+                if ((entity.collidesWith.filter(elem => elem === collider.collideGroup).length > 0) 
+                    && collider.collidesWith.filter(elem => elem === entity.collideGroup).length > 0)
+                {
+                    collider.destroy();
+                }
+            }
+        }
+    });
 }
