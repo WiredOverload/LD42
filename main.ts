@@ -1,8 +1,8 @@
 /*TODO:
- * Clean up stuff that will remain in main
  * Clean up Point update function
  * ^ Line updates and Point updates should be completely separate even though they are related
- * NO MAGIC NUMBERS -> every entity should have width and height, so all the + 8 crap has to go
+ * Finish cleaning up magic numbers
+ * Add AABB heights and widths to ICollidable -> entities like bullet don't have the same visual and hitbox heights and widths
 */
 import { Player } from "./Player";
 import { Point } from "./Point";

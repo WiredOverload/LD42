@@ -119,7 +119,7 @@ define(["require", "exports", "./Line", "./ICollidable", "./Explosion"], functio
                 });
             }
             context.fillStyle = "#000000";
-            context.fillRect(this.x, this.y, 8, 8);
+            context.fillRect(this.x, this.y, this.width, this.height);
         };
         Point.prototype.destroy = function () {
             if (!this.stuck) {

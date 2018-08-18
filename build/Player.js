@@ -43,7 +43,7 @@ define(["require", "exports", "./Bullet", "./ICollidable"], function (require, e
         Player.prototype.render = function (context) {
             context.translate(this.x, this.y);
             context.rotate(this.angle + Math.PI / 2);
-            context.drawImage(this.draw, -8, -8);
+            context.drawImage(this.draw, -this.width / 2, -this.height / 2);
             context.rotate(-(this.angle + Math.PI / 2));
             context.translate(-this.x, -this.y);
         };

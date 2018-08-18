@@ -37,10 +37,11 @@ export class Point implements IUpdatable, IRenderable, ICollidable, IKillable {
         this.collidesWith = [CollideGroup.Bullet, CollideGroup.Player];
     }
 
-    // TODO (WiredOverload): clean this up
-    // separate out to mult functions!!
-    // want to avoid this "params: any" parameter for all IUpdatable entities
-    // Line updates and Point updates should be completely separate even though they are related!!
+    // TODO (WiredOverload):
+    // * separate out to mult functions!!
+    // * want to avoid this "params: any" parameter for all IUpdatable entities
+    // * Line updates and Point updates should be completely separate even though they are related!!
+    // * clean up magic numbers
     update(params: any) : void {
         if(!this.stuck) {
             this.x += this.velX;
@@ -144,16 +145,12 @@ export class Point implements IUpdatable, IRenderable, ICollidable, IKillable {
         }
 
         context.fillStyle = "#000000";//4800FF
-        context.fillRect(this.x, this.y, 8, 8);
+        context.fillRect(this.x, this.y, this.width, this.height);
     }
 
     destroy() : void {
         if (!this.stuck) {
             this.alive = false;
-            // tick += 180; // TODO: Pull in reference to score / tick counter so "destroying" Points will add to score
-
-            // this.explodeSound.volume = 1;
-            // this.explodeSound.play();
         }
     }
 

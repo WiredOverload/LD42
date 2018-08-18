@@ -12,6 +12,7 @@ export class Line {
         this.health = 1;
     }
 
+    // TODO (WiredOverload): clean up magic number
     render(context: CanvasRenderingContext2D) : void {
         context.beginPath();
         context.moveTo(this.x + 4, this.y + 4);

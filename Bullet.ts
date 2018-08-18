@@ -32,9 +32,11 @@ export class Bullet implements IUpdatable, IRenderable, ICollidable, IKillable {
         this.x += Math.cos(this.angle) * this.vel;
         this.y += Math.sin(this.angle) * this.vel;
 
+        // canvas width
         if (this.x > 1024 || this.x < 0) {
             this.alive = false;
         }
+        // canvas height
         if (this.y > 256 || this.y < 0) {
             this.alive = false;
         }
@@ -43,7 +45,7 @@ export class Bullet implements IUpdatable, IRenderable, ICollidable, IKillable {
     render(context : CanvasRenderingContext2D) : void {
         context.translate(this.x, this.y);
         context.rotate(this.angle + 3*Math.PI/2);
-        context.drawImage(this.draw, -4, -8);
+        context.drawImage(this.draw, -this.width/2, -this.height); // TODO: -> update with visual h/w not AABB h/w
         context.rotate(-(this.angle + 3*Math.PI/2));
         context.translate(-this.x, -this.y);
     }
