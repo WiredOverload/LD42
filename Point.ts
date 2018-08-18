@@ -32,7 +32,9 @@ export class Point implements IRenderable, ICollidable {
         this.collidesWith = CollideGroup.Bullet || CollideGroup.Ship;
     }
 
-    update(pointList: Point[], shadow: Shadow) : void {
+    // separate out to mult functions!!
+    // would be nice if we could implement IUpdatable here
+    updatePointsAndLines(pointList: Point[], shadow: Shadow) : void {
         if(!this.stuck) {
             this.x += this.velX;
             this.y += this.velY;

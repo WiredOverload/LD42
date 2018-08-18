@@ -15,19 +15,9 @@ define(["require", "exports", "./ICollidable"], function (require, exports, ICol
             this.collideGroup = ICollidable_1.CollideGroup.Bullet;
             this.collidesWith = ICollidable_1.CollideGroup.Point;
         }
-        Bullet.prototype.update = function (nodes) {
-            var _this = this;
+        Bullet.prototype.update = function () {
             this.x += Math.cos(this.angle) * this.vel;
             this.y += Math.sin(this.angle) * this.vel;
-            nodes.forEach(function (node) {
-                if (node.x < _this.x + _this.w &&
-                    node.x + 8 > _this.x &&
-                    node.y < _this.y + _this.h &&
-                    8 + node.y > _this.y &&
-                    !node.stuck) {
-                    node.pop();
-                }
-            });
             if (this.x > 1024 || this.x < 0) {
                 this.alive = false;
             }

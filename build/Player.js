@@ -14,10 +14,10 @@ define(["require", "exports", "./Bullet", "./ICollidable"], function (require, e
             this.collideGroup = ICollidable_1.CollideGroup.Ship;
             this.collidesWith = ICollidable_1.CollideGroup.Point || ICollidable_1.CollideGroup.Shadow;
         }
-        Player.prototype.update = function (mouseX, mouseY) {
-            this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
-            var v1 = this.x - mouseX;
-            var v2 = this.y - mouseY;
+        Player.prototype.update = function () {
+            this.angle = Math.atan2(this.mouseY - this.y, this.mouseX - this.x);
+            var v1 = this.x - this.mouseX;
+            var v2 = this.y - this.mouseY;
             var distance = Math.sqrt(v1 * v1 + v2 * v2);
             if (distance > 75) {
                 if (this.vel < this.maxVel) {

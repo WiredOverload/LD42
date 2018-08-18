@@ -1,6 +1,7 @@
 import { Line } from "./Line";
+import { IRenderable } from "./IRenderable";
 
-export class Shadow {
+export class Shadow implements IRenderable {
     topToBottomLine: Line;
     bottomToTopLine: Line;
     rightToTopLine: Line;

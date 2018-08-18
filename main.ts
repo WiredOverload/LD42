@@ -11,10 +11,15 @@ import { Bullet } from "./Bullet";
 import { Point } from "./Point";
 import { Line } from "./Line";
 import { Shadow } from "./Shadow";
+import { isRenderable } from "./IRenderable";
+import { isUpdatable } from "./IUpdatable";
 
 var player = new Player();
 var shadow = new Shadow();
 var bullets:Bullet[] = [];
+var entities:object[] = [];
+entities.push(player);
+entities.push(shadow);
 
 //canvas creation
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
@@ -43,7 +48,6 @@ var explosion = new Image();
 explosion.src = "assets/mediumExplosion4.png";
 
 //list of all points
-var elements:object[] = [];
 var pointList:Point[] = [];
 var deadPoints:Point[] = [];
 
@@ -56,20 +60,27 @@ function render() {
     context.fillRect(0, 0, canvas.width, canvas.height);
     //context.clearRect(0, 0, canvas.width, canvas.height);
 
-    shadow.render(context);
+    // shadow.render(context);
 
     pointList.forEach(point => {
         point.render(context);
     });
 
-    player.render(context);
+    // player.render(context);
 
     deadPoints.forEach(point => {
         context.drawImage(explosion, point.x - 4, point.y - 4);
     });
 
-    bullets.forEach(bullet => {
-        bullet.render(context);
+    // bullets.forEach(bullet => {
+    //     bullet.render(context);
+    // });
+
+    // global elements code:
+    entities.forEach(entity => {
+        if (isRenderable(entity)) {
+            entity.render(context);
+        }
     });
 }
 render();
@@ -88,17 +99,25 @@ function update() {
         if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
         }
+        // global elements code:
+        // elements.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
     }
 
     pointList.forEach(point => {
-        point.update(pointList, shadow);
+        point.updatePointsAndLines(pointList, shadow);
     });
 
-    player.update(mouseX, mouseY);
-
-    bullets.forEach(bullet => {
-        bullet.update(pointList);
+    entities.forEach(entity => {
+        if (isUpdatable(entity)) {
+            entity.update();
+        }
     });
+
+    // player.update(mouseX, mouseY);
+
+    // bullets.forEach(bullet => {
+    //     bullet.update(pointList);
+    // });
 
     pointList.forEach(element =>{
         if (!element.alive) {
@@ -158,6 +177,8 @@ function getMousePos(canvas, evt) {
     rect = canvas.getBoundingClientRect();
     mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+    player.mouseX = mouseX;
+    player.mouseY = mouseY;
 }
 
 canvas.addEventListener('mousemove', function(evt) {
@@ -176,6 +197,8 @@ function setCanvasClickEvent() {
         }
         else {
             bullets.push(player.shoot());
+            //global elements code:
+            entities.push(player.shoot());
         }
         return false;
     }
@@ -190,7 +213,12 @@ function reset() {
     player = new Player();
     isPlayerAlive = true;
     tracker = new Point(1020, 128, 0, 0);
+
+    // global elements code:
     shadow = new Shadow();
+    entities = [];
+    entities.push(player);
+    entities.push(shadow);
 }
 
 setCanvasClickEvent();

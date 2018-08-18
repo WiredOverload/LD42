@@ -2,10 +2,13 @@ import { Bullet } from "./Bullet";
 import { ICollidable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
 import { IRenderable } from "./IRenderable";
+import { IUpdatable } from "./IUpdatable";
 
-export class Player implements IRenderable, ICollidable {
+export class Player implements IUpdatable, IRenderable, ICollidable {
     x: number;
     y: number;
+    mouseX: number;
+    mouseY: number;
     vel: number;
     maxVel: number;
     angle: number;
@@ -26,10 +29,10 @@ export class Player implements IRenderable, ICollidable {
         this.collidesWith = CollideGroup.Point || CollideGroup.Shadow;
     }
 
-    update(mouseX: number, mouseY: number) : void {
-        this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
-        var v1 = this.x - mouseX;
-        var v2 = this.y - mouseY;
+    update() : void {
+        this.angle = Math.atan2(this.mouseY - this.y, this.mouseX - this.x);
+        var v1 = this.x - this.mouseX;
+        var v2 = this.y - this.mouseY;
         var distance = Math.sqrt(v1*v1 + v2*v2);
         if (distance > 75) {
             if (this.vel < this.maxVel) {

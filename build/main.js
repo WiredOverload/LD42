@@ -1,9 +1,12 @@
-define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1) {
+define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1) {
     "use strict";
     exports.__esModule = true;
     var player = new Player_1.Player();
     var shadow = new Shadow_1.Shadow();
     var bullets = [];
+    var entities = [];
+    entities.push(player);
+    entities.push(shadow);
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
     var mouseX = -10;
@@ -18,7 +21,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], func
     var spawnRate = 60;
     var explosion = new Image();
     explosion.src = "assets/mediumExplosion4.png";
-    var elements = [];
     var pointList = [];
     var deadPoints = [];
     var tracker = new Point_1.Point(1020, 128, 0, 0);
@@ -26,16 +28,16 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], func
         context.strokeStyle = "#000000";
         context.fillStyle = "lightgrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        shadow.render(context);
         pointList.forEach(function (point) {
             point.render(context);
         });
-        player.render(context);
         deadPoints.forEach(function (point) {
             context.drawImage(explosion, point.x - 4, point.y - 4);
         });
-        bullets.forEach(function (bullet) {
-            bullet.render(context);
+        entities.forEach(function (entity) {
+            if (IRenderable_1.isRenderable(entity)) {
+                entity.render(context);
+            }
         });
     }
     render();
@@ -55,11 +57,12 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], func
             }
         }
         pointList.forEach(function (point) {
-            point.update(pointList, shadow);
+            point.updatePointsAndLines(pointList, shadow);
         });
-        player.update(mouseX, mouseY);
-        bullets.forEach(function (bullet) {
-            bullet.update(pointList);
+        entities.forEach(function (entity) {
+            if (IUpdatable_1.isUpdatable(entity)) {
+                entity.update();
+            }
         });
         pointList.forEach(function (element) {
             if (!element.alive) {
@@ -109,6 +112,8 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], func
         rect = canvas.getBoundingClientRect();
         mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
         mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+        player.mouseX = mouseX;
+        player.mouseY = mouseY;
     }
     canvas.addEventListener('mousemove', function (evt) {
         var mousePos = getMousePos(canvas, evt);
@@ -125,6 +130,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], func
             }
             else {
                 bullets.push(player.shoot());
+                entities.push(player.shoot());
             }
             return false;
         };
@@ -139,6 +145,9 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow"], func
         isPlayerAlive = true;
         tracker = new Point_1.Point(1020, 128, 0, 0);
         shadow = new Shadow_1.Shadow();
+        entities = [];
+        entities.push(player);
+        entities.push(shadow);
     }
     setCanvasClickEvent();
 });

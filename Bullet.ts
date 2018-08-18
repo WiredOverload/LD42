@@ -1,7 +1,9 @@
+import { IRenderable } from "./IRenderable";
 import { ICollidable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
+import { IUpdatable } from "./IUpdatable";
 
-export class Bullet implements ICollidable {
+export class Bullet implements IUpdatable, IRenderable, ICollidable {
     x: number;
     y: number;
     w: number;
@@ -26,20 +28,22 @@ export class Bullet implements ICollidable {
         this.collidesWith = CollideGroup.Point;
     }
 
-    update(nodes: any[]) {
+    // update(nodes: any[]) {
+    update() {
         this.x += Math.cos(this.angle) * this.vel;
         this.y += Math.sin(this.angle) * this.vel;
 
         // projectile collision
-        nodes.forEach(node => {
-            if (node.x < this.x + this.w &&
-            node.x + 8 > this.x &&
-            node.y < this.y + this.h &&
-            8 + node.y > this.y &&
-            !node.stuck) {
-                node.pop();
-            }
-        });
+
+        // nodes.forEach(node => {
+        //     if (node.x < this.x + this.w &&
+        //     node.x + 8 > this.x &&
+        //     node.y < this.y + this.h &&
+        //     8 + node.y > this.y &&
+        //     !node.stuck) {
+        //         node.pop();
+        //     }
+        // });
 
         if (this.x > 1024 || this.x < 0) {
             this.alive = false;
