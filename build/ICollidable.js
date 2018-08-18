@@ -10,7 +10,12 @@ define(["require", "exports"], function (require, exports) {
     })(CollideGroup = exports.CollideGroup || (exports.CollideGroup = {}));
     function isCollidable(obj) {
         var collidableObj = obj;
-        return (collidableObj.collideGroup !== undefined
+        return (collidableObj.x !== undefined
+            && collidableObj.y !== undefined
+            && collidableObj.width !== undefined
+            && collidableObj.height !== undefined
+            && collidableObj.alive !== undefined
+            && collidableObj.collideGroup !== undefined
             && collidableObj.collidesWith !== undefined);
     }
     exports.isCollidable = isCollidable;

@@ -3,10 +3,8 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     exports.__esModule = true;
     var player = new Player_1.Player();
     var shadow = new Shadow_1.Shadow();
-    var bullets = [];
     var entities = [];
     entities.push(player);
-    entities.push(shadow);
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
     var mouseX = -10;
@@ -21,16 +19,13 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     var spawnRate = 60;
     var explosion = new Image();
     explosion.src = "assets/mediumExplosion4.png";
-    var pointList = [];
     var deadPoints = [];
     var tracker = new Point_1.Point(1020, 128, 0, 0);
     function render() {
         context.strokeStyle = "#000000";
         context.fillStyle = "lightgrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        pointList.forEach(function (point) {
-            point.render(context);
-        });
+        shadow.render(context);
         deadPoints.forEach(function (point) {
             context.drawImage(explosion, point.x - 4, point.y - 4);
         });
@@ -42,48 +37,32 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     }
     render();
     function update() {
+        var tempLines = [];
         if (tick % spawnRate == 0) {
-            var tempLines = [];
-            pointList.forEach(function (element) {
-                if (element.stuck) {
-                    tempLines.push(new Line_1.Line(0, 128, element.x, element.y));
-                }
-            });
             tempLines.push(new Line_1.Line(0, 128, tracker.x, tracker.y));
             spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;
-            pointList.push(new Point_1.Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
+            entities.push(new Point_1.Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
             if (tick % (spawnRate * 5) == 0 && spawnRate != 5) {
                 spawnRate--;
             }
         }
-        pointList.forEach(function (point) {
-            point.updatePointsAndLines(pointList, shadow);
-        });
+        var tempParams = {
+            entities: entities,
+            shadow: shadow
+        };
         entities.forEach(function (entity) {
             if (IUpdatable_1.isUpdatable(entity)) {
-                entity.update();
+                entity.update(tempParams);
+            }
+            if (entity instanceof Point_1.Point) {
+                if (entity.stuck) {
+                    tempLines.push(new Line_1.Line(0, 128, entity.x, entity.y));
+                }
             }
         });
-        pointList.forEach(function (element) {
-            if (!element.alive) {
-                element.explodeTime = tick;
-                deadPoints.push(element);
-            }
-        });
-        bullets = bullets.filter(function (bullet) { return bullet.alive; });
-        deadPoints = deadPoints.filter(function (point) { return point.explodeTime - tick > -12; });
-        pointList = pointList.filter(function (point) { return point.alive; });
         if (shadow.consumePlayer(player)) {
             death();
         }
-        pointList.forEach(function (point) {
-            if (player.x < point.x + 8 &&
-                player.x > point.x &&
-                player.y < point.y + 8 &&
-                player.y > point.y) {
-                death();
-            }
-        });
     }
     function mainLoop() {
         if (isPlayerAlive) {
@@ -129,7 +108,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                 window.requestAnimationFrame(mainLoop);
             }
             else {
-                bullets.push(player.shoot());
                 entities.push(player.shoot());
             }
             return false;
@@ -138,16 +116,13 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     function reset() {
         tick = 0;
         spawnRate = 60;
-        pointList = [];
         deadPoints = [];
-        bullets = [];
         player = new Player_1.Player();
         isPlayerAlive = true;
         tracker = new Point_1.Point(1020, 128, 0, 0);
         shadow = new Shadow_1.Shadow();
         entities = [];
         entities.push(player);
-        entities.push(shadow);
     }
     setCanvasClickEvent();
 });

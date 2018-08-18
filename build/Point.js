@@ -6,6 +6,8 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             if (Lines === void 0) { Lines = []; }
             this.x = X;
             this.y = Y;
+            this.height = 8;
+            this.width = 8;
             this.velX = VelX;
             this.velY = VelY;
             this.health = 5;
@@ -17,7 +19,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
             this.collideGroup = ICollidable_1.CollideGroup.Point;
             this.collidesWith = ICollidable_1.CollideGroup.Bullet || ICollidable_1.CollideGroup.Ship;
         }
-        Point.prototype.updatePointsAndLines = function (pointList, shadow) {
+        Point.prototype.update = function (params) {
             var _this = this;
             if (!this.stuck) {
                 this.x += this.velX;
@@ -26,7 +28,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                     this.y = 0;
                     this.stuck = true;
                     var isFarthest = true;
-                    pointList.forEach(function (point) {
+                    params.entities.forEach(function (point) {
                         if (point.stuck == true && point.y == 0 && point.x > _this.x) {
                             isFarthest = false;
                         }
@@ -38,14 +40,14 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        shadow.topToBottomLine = tempLine;
+                        params.shadow.topToBottomLine = tempLine;
                     }
                 }
                 else if (this.y >= 248) {
                     this.y = 248;
                     this.stuck = true;
                     var isFarthest = true;
-                    pointList.forEach(function (point) {
+                    params.entities.forEach(function (point) {
                         if (point.stuck == true && point.y == 248 && point.x > _this.x) {
                             isFarthest = false;
                         }
@@ -57,7 +59,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        shadow.bottomToTopLine = tempLine;
+                        params.shadow.bottomToTopLine = tempLine;
                     }
                 }
                 else if (this.x >= 1016) {
@@ -65,7 +67,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                     this.stuck = true;
                     var isFarthestUp = true;
                     var isFarthestDown = true;
-                    pointList.forEach(function (point) {
+                    params.entities.forEach(function (point) {
                         if (point.stuck == true && point.x == 1016 && point.y < _this.y) {
                             isFarthestUp = false;
                         }
@@ -80,7 +82,7 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        shadow.rightToTopLine = tempLine;
+                        params.shadow.rightToTopLine = tempLine;
                     }
                     if (isFarthestDown) {
                         var tempLine = new Line_1.Line(this.x, this.y, 0, 256);
@@ -89,19 +91,19 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
                                 tempLine.x2 = point.x2;
                             }
                         });
-                        shadow.rightToBottomLine = tempLine;
+                        params.shadow.rightToBottomLine = tempLine;
                     }
                 }
             }
             else {
                 if (this.y == 0) {
-                    if (this.x < shadow.topToBottomLine.x - 64) {
-                        pointList.splice(pointList.indexOf(this), 1);
+                    if (this.x < params.shadow.topToBottomLine.x - 64) {
+                        params.entities.splice(params.entities.indexOf(this), 1);
                     }
                 }
                 else {
-                    if (this.x < shadow.bottomToTopLine.x - 64) {
-                        pointList.splice(pointList.indexOf(this), 1);
+                    if (this.x < params.shadow.bottomToTopLine.x - 64) {
+                        params.entities.splice(params.entities.indexOf(this), 1);
                     }
                 }
             }

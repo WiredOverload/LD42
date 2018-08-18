@@ -7,6 +7,8 @@ import { IUpdatable } from "./IUpdatable";
 export class Player implements IUpdatable, IRenderable, ICollidable {
     x: number;
     y: number;
+    height: number;
+    width: number;
     mouseX: number;
     mouseY: number;
     vel: number;
@@ -14,11 +16,15 @@ export class Player implements IUpdatable, IRenderable, ICollidable {
     angle: number;
     accl: number;
     draw: HTMLImageElement;
+    alive: boolean;
     collideGroup: CollideGroup;
     collidesWith: CollideGroup;
     constructor() {
         this.x = 800;
         this.y = 128;
+        this.height = 16;
+        this.width = 16;
+        this.alive = true;
         this.vel = 0;
         this.maxVel = 6;
         this.angle = 0;

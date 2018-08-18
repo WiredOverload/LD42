@@ -3,10 +3,13 @@ import { IRenderable } from "./IRenderable";
 import { ICollidable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
 import { Shadow } from "./Shadow";
+import { IUpdatable } from "./IUpdatable";
 
-export class Point implements IRenderable, ICollidable {
+export class Point implements IUpdatable, IRenderable, ICollidable {
     x: number;
     y: number;
+    height: number;
+    width: number;
     velX: number;
     velY: number;
     health: number;
@@ -20,6 +23,8 @@ export class Point implements IRenderable, ICollidable {
     constructor(X: number, Y: number, VelX: number, VelY: number, Lines = []) {
         this.x = X;
         this.y = Y;
+        this.height = 8;
+        this.width = 8;
         this.velX = VelX;
         this.velY = VelY;
         this.health = 5;
@@ -34,7 +39,7 @@ export class Point implements IRenderable, ICollidable {
 
     // separate out to mult functions!!
     // would be nice if we could implement IUpdatable here
-    updatePointsAndLines(pointList: Point[], shadow: Shadow) : void {
+    update(params: any) : void {
         if(!this.stuck) {
             this.x += this.velX;
             this.y += this.velY;
@@ -43,7 +48,7 @@ export class Point implements IRenderable, ICollidable {
                 this.y = 0;
                 this.stuck = true;
                 var isFarthest:boolean = true;
-                pointList.forEach(point => {
+                params.entities.forEach(point => {
                     if(point.stuck == true && point.y == 0 && point.x > this.x) {
                         isFarthest = false;
                     }
@@ -55,14 +60,14 @@ export class Point implements IRenderable, ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    shadow.topToBottomLine = tempLine;
+                    params.shadow.topToBottomLine = tempLine;
                 }
             }
             else if(this.y >= 248) {
                 this.y = 248;
                 this.stuck = true;
                 var isFarthest:boolean = true;
-                pointList.forEach(point => {
+                params.entities.forEach(point => {
                     if(point.stuck == true && point.y == 248 && point.x > this.x) {
                         isFarthest = false;
                     }
@@ -74,7 +79,7 @@ export class Point implements IRenderable, ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    shadow.bottomToTopLine = tempLine;
+                    params.shadow.bottomToTopLine = tempLine;
                 }
             }
             else if(this.x >= 1016) {//change to losing game
@@ -82,7 +87,7 @@ export class Point implements IRenderable, ICollidable {
                 this.stuck = true;
                 var isFarthestUp:boolean = true;
                 var isFarthestDown:boolean = true;
-                pointList.forEach(point => {
+                params.entities.forEach(point => {
                     if(point.stuck == true && point.x == 1016 && point.y < this.y) {
                         isFarthestUp = false;
                     }
@@ -97,7 +102,7 @@ export class Point implements IRenderable, ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    shadow.rightToTopLine = tempLine;
+                    params.shadow.rightToTopLine = tempLine;
                 }
                 if(isFarthestDown) {
                     var tempLine = new Line(this.x, this.y, 0, 256);
@@ -106,20 +111,20 @@ export class Point implements IRenderable, ICollidable {
                             tempLine.x2 = point.x2;
                         }
                     });
-                    shadow.rightToBottomLine = tempLine;
+                    params.shadow.rightToBottomLine = tempLine;
                 }
             }
         }
         else {
             //point deletion
             if(this.y == 0) {
-                if(this.x < shadow.topToBottomLine.x - 64) {
-                    pointList.splice(pointList.indexOf(this), 1);
+                if(this.x < params.shadow.topToBottomLine.x - 64) {
+                    params.entities.splice(params.entities.indexOf(this), 1);
                 }
             }
             else {
-                if(this.x < shadow.bottomToTopLine.x - 64) {
-                    pointList.splice(pointList.indexOf(this), 1);
+                if(this.x < params.shadow.bottomToTopLine.x - 64) {
+                    params.entities.splice(params.entities.indexOf(this), 1);
                 }
             }
         }

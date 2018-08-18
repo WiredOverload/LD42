@@ -1,5 +1,6 @@
 export interface IUpdatable {
-    update() : void;
+    // temp param here till we resolve Point update method
+    update(params: any) : void;
 }
 
 export function isUpdatable(obj: object):obj is IUpdatable {

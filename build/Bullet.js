@@ -6,8 +6,8 @@ define(["require", "exports", "./ICollidable"], function (require, exports, ICol
             this.x = XPos;
             this.y = YPos;
             this.angle = Angle;
-            this.w = 8;
-            this.h = 8;
+            this.width = 8;
+            this.height = 8;
             this.vel = 8;
             this.alive = true;
             this.draw = new Image();

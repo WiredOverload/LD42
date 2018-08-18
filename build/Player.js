@@ -5,6 +5,9 @@ define(["require", "exports", "./Bullet", "./ICollidable"], function (require, e
         function Player() {
             this.x = 800;
             this.y = 128;
+            this.height = 16;
+            this.width = 16;
+            this.alive = true;
             this.vel = 0;
             this.maxVel = 6;
             this.angle = 0;

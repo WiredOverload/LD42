@@ -6,8 +6,8 @@ import { IUpdatable } from "./IUpdatable";
 export class Bullet implements IUpdatable, IRenderable, ICollidable {
     x: number;
     y: number;
-    w: number;
-    h: number;
+    width: number;
+    height: number;
     vel: number;
     angle: number;
     alive: boolean;
@@ -18,8 +18,8 @@ export class Bullet implements IUpdatable, IRenderable, ICollidable {
         this.x = XPos;
         this.y = YPos;
         this.angle = Angle;
-        this.w = 8;
-        this.h = 8;
+        this.width = 8;
+        this.height = 8;
         this.vel = 8;
         this.alive = true;
         this.draw = new Image();

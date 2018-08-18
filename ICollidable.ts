@@ -13,11 +13,11 @@ export enum CollideGroup {
 // }
 
 export interface ICollidable {
-    // x: number;
-    // y: number;
-    // width: number;
-    // height: number;
-    // isAlive: boolean;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    alive: boolean;
     collideGroup: CollideGroup;
     collidesWith: CollideGroup;
     // getAABB() : AABB;
@@ -27,7 +27,12 @@ export interface ICollidable {
 export function isCollidable(obj: object) : obj is ICollidable {
     var collidableObj : ICollidable = <ICollidable>obj;
     
-    return (collidableObj.collideGroup !== undefined
+    return (collidableObj.x !== undefined
+            && collidableObj.y !== undefined
+            && collidableObj.width !== undefined
+            && collidableObj.height !== undefined
+            && collidableObj.alive !== undefined
+            &&collidableObj.collideGroup !== undefined
             && collidableObj.collidesWith !== undefined);
             // etc.
 }
