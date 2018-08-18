@@ -1,4 +1,4 @@
-define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable", "./ICollidable", "./Explosion"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1, ICollidable_1, Explosion_1) {
+define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./Explosion", "./IRenderable", "./IUpdatable", "./ICollidable", "./IKillable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, Explosion_1, IRenderable_1, IUpdatable_1, ICollidable_1, IKillable_1) {
     "use strict";
     exports.__esModule = true;
     var canvas = document.getElementById("imgCanvas");
@@ -64,7 +64,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                 console.log("sup dude");
             }
         });
-        entities = entities.filter(function (entity) { return ICollidable_1.isAlive(entity); });
+        entities = entities.filter(function (entity) { return IKillable_1.isAlive(entity); });
         shadow.consumePlayer(player);
         if (!player.alive) {
             death();

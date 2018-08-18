@@ -19,12 +19,6 @@ define(["require", "exports"], function (require, exports) {
             && collidableObj.destroy !== undefined);
     }
     exports.isCollidable = isCollidable;
-    function isAlive(obj) {
-        var killableObj = obj;
-        return (killableObj.alive !== undefined
-            && killableObj.alive === true);
-    }
-    exports.isAlive = isAlive;
     function checkCollision(collider, entities) {
         entities.forEach(function (entity) {
             if (isCollidable(entity)) {

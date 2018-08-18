@@ -1,8 +1,8 @@
 import { Bullet } from "./Bullet";
-import { ICollidable, IKillable } from "./ICollidable";
-import { CollideGroup } from "./ICollidable";
+import { ICollidable, CollideGroup } from "./ICollidable";
 import { IRenderable } from "./IRenderable";
 import { IUpdatable } from "./IUpdatable";
+import { IKillable } from "./IKillable";
 
 export class Player implements IUpdatable, IRenderable, ICollidable, IKillable {
     x: number;

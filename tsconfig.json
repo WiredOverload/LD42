@@ -20,5 +20,6 @@
         "IUpdatable.ts",
         "IRenderable.ts",
         "ICollidable.ts",
+        "IKillable.ts",
     ]
 }

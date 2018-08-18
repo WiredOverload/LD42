@@ -8,14 +8,14 @@
  * add "explosion" class
 */
 import { Player } from "./Player";
-// import { Bullet } from "./Bullet";
 import { Point } from "./Point";
 import { Line } from "./Line";
 import { Shadow } from "./Shadow";
+import { Explosion } from "./Explosion";
 import { isRenderable } from "./IRenderable";
 import { isUpdatable } from "./IUpdatable";
-import { isCollidable, checkCollision, isAlive } from "./ICollidable";
-import { Explosion } from "./Explosion";
+import { isCollidable, checkCollision } from "./ICollidable";
+import { isAlive } from "./IKillable";
 
 // scene set up
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");

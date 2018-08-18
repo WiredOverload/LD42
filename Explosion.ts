@@ -1,7 +1,8 @@
 import { IRenderable } from "./IRenderable";
 import { IUpdatable } from "./IUpdatable";
+import { IKillable } from "./IKillable";
 
-export class Explosion implements IUpdatable, IRenderable {
+export class Explosion implements IUpdatable, IRenderable, IKillable {
     x: number;
     y: number;
     width: number;
