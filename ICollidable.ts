@@ -10,10 +10,14 @@ export interface ICollidable {
     y: number;
     width: number;
     height: number;
-    alive: boolean;
+    // alive: boolean;
     collideGroup: CollideGroup;
     collidesWith: CollideGroup[];
     destroy() : void;
+}
+
+export interface IKillable {
+    alive: boolean;
 }
 
 export function isCollidable(obj: object) : obj is ICollidable {
@@ -23,26 +27,28 @@ export function isCollidable(obj: object) : obj is ICollidable {
             && collidableObj.y !== undefined
             && collidableObj.width !== undefined
             && collidableObj.height !== undefined
-            && collidableObj.alive !== undefined
+            // && collidableObj.alive !== undefined
             &&collidableObj.collideGroup !== undefined
             && collidableObj.collidesWith !== undefined
             && collidableObj.destroy !== undefined);
             // etc.
 }
 
-export function isAlive(obj: object) : obj is ICollidable {
-    var collidableObj : ICollidable = <ICollidable>obj;
+export function isAlive(obj: object) : obj is IKillable {
+    var killableObj : IKillable = <IKillable>obj;
     
-    return (collidableObj.x !== undefined
-            && collidableObj.y !== undefined
-            && collidableObj.width !== undefined
-            && collidableObj.height !== undefined
-            && collidableObj.alive !== undefined
-            &&collidableObj.collideGroup !== undefined
-            && collidableObj.collidesWith !== undefined
-            && collidableObj.destroy !== undefined
-            // alive check
-            && collidableObj.alive === true);
+    // return (collidableObj.x !== undefined
+    //         && collidableObj.y !== undefined
+    //         && collidableObj.width !== undefined
+    //         && collidableObj.height !== undefined
+    //         && collidableObj.alive !== undefined
+    //         &&collidableObj.collideGroup !== undefined
+    //         && collidableObj.collidesWith !== undefined
+    //         && collidableObj.destroy !== undefined
+    //         // alive check
+    //         && collidableObj.alive === true);
+    return (killableObj.alive !== undefined 
+        && killableObj.alive === true);
 }
 
 export function checkCollision(collider: ICollidable, entities: object[]) : void {

@@ -1,11 +1,11 @@
-define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable", "./ICollidable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1, ICollidable_1) {
+define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable", "./ICollidable", "./Explosion"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1, ICollidable_1, Explosion_1) {
     "use strict";
     exports.__esModule = true;
     var canvas = document.getElementById("imgCanvas");
     var context = canvas.getContext("2d");
     var mouseX = -10;
     var mouseY = -10;
-    var rect;
+    var rect = null;
     var player = new Player_1.Player();
     var shadow = new Shadow_1.Shadow();
     var entities = [];
@@ -16,18 +16,12 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     var highScore = 0;
     var spawnVel = 1;
     var spawnRate = 60;
-    var explosion = new Image();
-    explosion.src = "assets/mediumExplosion4.png";
-    var deadPoints = [];
     var tracker = new Point_1.Point(1020, 128, 0, 0);
     function render() {
         context.strokeStyle = "#000000";
         context.fillStyle = "lightgrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
         shadow.render(context);
-        deadPoints.forEach(function (point) {
-            context.drawImage(explosion, point.x - 4, point.y - 4);
-        });
         entities.forEach(function (entity) {
             if (IRenderable_1.isRenderable(entity)) {
                 entity.render(context);
@@ -53,15 +47,22 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
             if (IUpdatable_1.isUpdatable(entity)) {
                 entity.update(tempParams);
             }
-            if (entity instanceof Point_1.Point) {
-                if (entity.stuck) {
-                    tempLines.push(new Line_1.Line(0, 128, entity.x, entity.y));
-                }
-            }
             if (ICollidable_1.isCollidable(entity)) {
                 ICollidable_1.checkCollision(entity, entities);
             }
             ;
+            if (entity instanceof Point_1.Point) {
+                if (entity.stuck) {
+                    tempLines.push(new Line_1.Line(0, 128, entity.x, entity.y));
+                }
+                if (!entity.alive) {
+                    entities.push(entity.explode());
+                    console.log("sup dude");
+                }
+            }
+            if (entity instanceof Explosion_1.Explosion) {
+                console.log("sup dude");
+            }
         });
         entities = entities.filter(function (entity) { return ICollidable_1.isAlive(entity); });
         shadow.consumePlayer(player);
@@ -85,7 +86,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
         document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
         isGameStarted = false;
         render();
-        context.drawImage(explosion, player.x + 8, player.y + 8);
         canvas.onmousedown = null;
         setTimeout(function () {
             setCanvasClickEvent();
@@ -99,7 +99,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
         player.mouseY = mouseY;
     }
     canvas.addEventListener('mousemove', function (evt) {
-        var mousePos = getMousePos(canvas, evt);
+        getMousePos(canvas, evt);
     }, false);
     function setCanvasClickEvent() {
         canvas.onmousedown = function () {
@@ -120,7 +120,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     function reset() {
         tick = 0;
         spawnRate = 60;
-        deadPoints = [];
         player = new Player_1.Player();
         tracker = new Point_1.Point(1020, 128, 0, 0);
         shadow = new Shadow_1.Shadow();

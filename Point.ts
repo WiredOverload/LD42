@@ -1,11 +1,12 @@
 import { Line } from "./Line";
 import { IRenderable } from "./IRenderable";
-import { ICollidable } from "./ICollidable";
+import { ICollidable, IKillable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
 import { Shadow } from "./Shadow";
 import { IUpdatable } from "./IUpdatable";
+import { Explosion } from "./Explosion";
 
-export class Point implements IUpdatable, IRenderable, ICollidable {
+export class Point implements IUpdatable, IRenderable, ICollidable, IKillable {
     x: number;
     y: number;
     height: number;
@@ -151,8 +152,16 @@ export class Point implements IUpdatable, IRenderable, ICollidable {
         if (!this.stuck) {
             this.alive = false;
             // tick += 180; // TODO: Pull in reference to score / tick counter so "destroying" Points will add to score
-            this.explodeSound.volume = 1;
-            this.explodeSound.play();
+
+            // this.explodeSound.volume = 1;
+            // this.explodeSound.play();
         }
+    }
+
+    explode() : Explosion {
+        console.log("hi");
+        var explodeSound = new Audio("./assets/slink.mp3");
+        explodeSound.play();
+        return new Explosion(this.x, this.y);
     }
 }

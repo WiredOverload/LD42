@@ -8,21 +8,21 @@
  * add "explosion" class
 */
 import { Player } from "./Player";
-import { Bullet } from "./Bullet";
+// import { Bullet } from "./Bullet";
 import { Point } from "./Point";
 import { Line } from "./Line";
 import { Shadow } from "./Shadow";
 import { isRenderable } from "./IRenderable";
 import { isUpdatable } from "./IUpdatable";
 import { isCollidable, checkCollision, isAlive } from "./ICollidable";
+import { Explosion } from "./Explosion";
 
 // scene set up
-
 var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
-var context = canvas.getContext("2d");
-var mouseX = -10;
-var mouseY = -10;
-var rect;
+var context:CanvasRenderingContext2D = canvas.getContext("2d");
+var mouseX:number = -10;
+var mouseY:number = -10;
+var rect = <ClientRect | DOMRect> null;
 
 var player = new Player();
 var shadow = new Shadow();
@@ -39,11 +39,11 @@ var spawnVel = 1;
 //how quickly points spawn, larger = longer
 var spawnRate = 60;
 
-var explosion = new Image();
-explosion.src = "assets/mediumExplosion4.png";
+// var explosion = new Image();
+// explosion.src = "assets/mediumExplosion4.png";
 
 //list of all dead points
-var deadPoints:Point[] = [];
+// var deadPoints:Point[] = [];
 
 //single point to help find other point positions
 var tracker = new Point(1020, 128, 0, 0);
@@ -55,9 +55,9 @@ function render() {
 
     shadow.render(context);
 
-    deadPoints.forEach(point => {
-        context.drawImage(explosion, point.x - 4, point.y - 4);
-    });
+    // deadPoints.forEach(point => {
+    //     context.drawImage(explosion, point.x - 4, point.y - 4);
+    // });
 
     entities.forEach(entity => {
         if (isRenderable(entity)) {
@@ -93,15 +93,24 @@ function update() {
             entity.update(tempParams);
         }
 
-        if (entity instanceof Point) {
-            if (entity.stuck) {
-                tempLines.push(new Line(0, 128, entity.x, entity.y));
-            }
-        }
-
         if (isCollidable(entity)) {
             checkCollision(entity, entities);
         };
+
+        if (entity instanceof Point) {
+        // this should be handled in a private Point method
+            if (entity.stuck) {
+                tempLines.push(new Line(0, 128, entity.x, entity.y));
+            }
+            if (!entity.alive) {
+                entities.push(entity.explode());
+                console.log("sup dude");
+            }
+        }
+        // test code below
+        if (entity instanceof Explosion) {
+            console.log("sup dude");
+        }
     });
 
     // deadPoints = deadPoints.filter(point => point.explodeTime - tick > -12);
@@ -133,14 +142,14 @@ function death() {
     document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
     isGameStarted = false;
     render();
-    context.drawImage(explosion, player.x + 8, player.y + 8);
+    // context.drawImage(explosion, player.x + 8, player.y + 8);
     canvas.onmousedown = null;
     setTimeout(function() {
         setCanvasClickEvent();
     }, 2500);
 }
 
-function getMousePos(canvas, evt) {
+function getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent) {
     rect = canvas.getBoundingClientRect();
     mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
@@ -148,8 +157,8 @@ function getMousePos(canvas, evt) {
     player.mouseY = mouseY;
 }
 
-canvas.addEventListener('mousemove', function(evt) {
-    var mousePos = getMousePos(canvas, evt);
+canvas.addEventListener('mousemove', function(evt: MouseEvent) {
+    getMousePos(canvas, evt);
 }, false);
 
 function setCanvasClickEvent() {
@@ -172,7 +181,7 @@ function setCanvasClickEvent() {
 function reset() {
     tick = 0;
     spawnRate = 60;
-    deadPoints = [];
+    // deadPoints = [];
     player = new Player();
     tracker = new Point(1020, 128, 0, 0);
     shadow = new Shadow();

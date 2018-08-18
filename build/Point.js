@@ -1,4 +1,4 @@
-define(["require", "exports", "./Line", "./ICollidable"], function (require, exports, Line_1, ICollidable_1) {
+define(["require", "exports", "./Line", "./ICollidable", "./Explosion"], function (require, exports, Line_1, ICollidable_1, Explosion_1) {
     "use strict";
     exports.__esModule = true;
     var Point = (function () {
@@ -124,9 +124,13 @@ define(["require", "exports", "./Line", "./ICollidable"], function (require, exp
         Point.prototype.destroy = function () {
             if (!this.stuck) {
                 this.alive = false;
-                this.explodeSound.volume = 1;
-                this.explodeSound.play();
             }
+        };
+        Point.prototype.explode = function () {
+            console.log("hi");
+            var explodeSound = new Audio("./assets/slink.mp3");
+            explodeSound.play();
+            return new Explosion_1.Explosion(this.x, this.y);
         };
         return Point;
     }());

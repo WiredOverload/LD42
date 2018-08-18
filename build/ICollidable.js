@@ -14,23 +14,15 @@ define(["require", "exports"], function (require, exports) {
             && collidableObj.y !== undefined
             && collidableObj.width !== undefined
             && collidableObj.height !== undefined
-            && collidableObj.alive !== undefined
             && collidableObj.collideGroup !== undefined
             && collidableObj.collidesWith !== undefined
             && collidableObj.destroy !== undefined);
     }
     exports.isCollidable = isCollidable;
     function isAlive(obj) {
-        var collidableObj = obj;
-        return (collidableObj.x !== undefined
-            && collidableObj.y !== undefined
-            && collidableObj.width !== undefined
-            && collidableObj.height !== undefined
-            && collidableObj.alive !== undefined
-            && collidableObj.collideGroup !== undefined
-            && collidableObj.collidesWith !== undefined
-            && collidableObj.destroy !== undefined
-            && collidableObj.alive === true);
+        var killableObj = obj;
+        return (killableObj.alive !== undefined
+            && killableObj.alive === true);
     }
     exports.isAlive = isAlive;
     function checkCollision(collider, entities) {

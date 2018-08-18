@@ -1,9 +1,9 @@
 import { IRenderable } from "./IRenderable";
-import { ICollidable } from "./ICollidable";
+import { ICollidable, IKillable } from "./ICollidable";
 import { CollideGroup } from "./ICollidable";
 import { IUpdatable } from "./IUpdatable";
 
-export class Bullet implements IUpdatable, IRenderable, ICollidable {
+export class Bullet implements IUpdatable, IRenderable, ICollidable, IKillable {
     x: number;
     y: number;
     width: number;
