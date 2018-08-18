@@ -1,4 +1,4 @@
-define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./Explosion", "./IRenderable", "./IUpdatable", "./ICollidable", "./IKillable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, Explosion_1, IRenderable_1, IUpdatable_1, ICollidable_1, IKillable_1) {
+define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IRenderable", "./IUpdatable", "./ICollidable", "./IKillable"], function (require, exports, Player_1, Point_1, Line_1, Shadow_1, IRenderable_1, IUpdatable_1, ICollidable_1, IKillable_1) {
     "use strict";
     exports.__esModule = true;
     var canvas = document.getElementById("imgCanvas");
@@ -56,27 +56,15 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./Ex
                     tempLines.push(new Line_1.Line(0, 128, entity.x, entity.y));
                 }
                 if (!entity.alive) {
+                    tick += 180;
                     entities.push(entity.explode());
-                    console.log("sup dude");
                 }
-            }
-            if (entity instanceof Explosion_1.Explosion) {
-                console.log("sup dude");
             }
         });
         entities = entities.filter(function (entity) { return IKillable_1.isAlive(entity); });
         shadow.consumePlayer(player);
         if (!player.alive) {
             death();
-        }
-    }
-    function mainLoop() {
-        if (player.alive) {
-            document.getElementById("TICKS").innerHTML = "Score: " + tick;
-            tick++;
-            update();
-            render();
-            window.requestAnimationFrame(mainLoop);
         }
     }
     function death() {
@@ -117,6 +105,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./Ex
             return false;
         };
     }
+    setCanvasClickEvent();
     function reset() {
         tick = 0;
         spawnRate = 60;
@@ -126,6 +115,14 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./Ex
         entities = [];
         entities.push(player);
     }
-    setCanvasClickEvent();
+    function mainLoop() {
+        if (player.alive) {
+            document.getElementById("TICKS").innerHTML = "Score: " + tick;
+            tick++;
+            update();
+            render();
+            window.requestAnimationFrame(mainLoop);
+        }
+    }
 });
 //# sourceMappingURL=main.js.map

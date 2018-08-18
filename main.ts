@@ -3,22 +3,18 @@
  * Clean up Point update function
  * ^ Line updates and Point updates should be completely separate even though they are related
  * NO MAGIC NUMBERS -> every entity should have width and height, so all the + 8 crap has to go
- * give all local vars types
- * fix scoring point system
- * add "explosion" class
 */
 import { Player } from "./Player";
 import { Point } from "./Point";
 import { Line } from "./Line";
 import { Shadow } from "./Shadow";
-import { Explosion } from "./Explosion";
 import { isRenderable } from "./IRenderable";
 import { isUpdatable } from "./IUpdatable";
 import { isCollidable, checkCollision } from "./ICollidable";
 import { isAlive } from "./IKillable";
 
 // scene set up
-var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
+var canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("imgCanvas");
 var context:CanvasRenderingContext2D = canvas.getContext("2d");
 var mouseX:number = -10;
 var mouseY:number = -10;
@@ -29,35 +25,24 @@ var shadow = new Shadow();
 var entities:object[] = [];
 entities.push(player);
 
-var tick = 0;
-var music = new Audio("assets/RayTracer2.mp3");
+var tick:number = 0; // acts as score for now as well as time
+var music:HTMLAudioElement = new Audio("assets/RayTracer2.mp3");
 var isGameStarted:boolean = false;
-var highScore = 0;
+var highScore:number = 0;
 
-//spawned point speed
-var spawnVel = 1;
-//how quickly points spawn, larger = longer
-var spawnRate = 60;
+var spawnVel:number = 1; //spawned point speed
+var spawnRate:number = 60; //how quickly points spawn, larger = longer
 
-// var explosion = new Image();
-// explosion.src = "assets/mediumExplosion4.png";
+var tracker:Point = new Point(1020, 128, 0, 0); //single point to help find other point positions
 
-//list of all dead points
-// var deadPoints:Point[] = [];
-
-//single point to help find other point positions
-var tracker = new Point(1020, 128, 0, 0);
-
-function render() {
+function render() : void {
+    // clear most recent frame's render
     context.strokeStyle="#000000";
     context.fillStyle = "lightgrey";
     context.fillRect(0, 0, canvas.width, canvas.height);
-
+    
+    // render shadow first as it's in the background
     shadow.render(context);
-
-    // deadPoints.forEach(point => {
-    //     context.drawImage(explosion, point.x - 4, point.y - 4);
-    // });
 
     entities.forEach(entity => {
         if (isRenderable(entity)) {
@@ -65,9 +50,10 @@ function render() {
         }
     });
 }
+
 render();
 
-function update() {
+function update() : void {
     var tempLines:Line[] = [];
 
     // TODO (WiredOverload): clean this up
@@ -103,21 +89,18 @@ function update() {
                 tempLines.push(new Line(0, 128, entity.x, entity.y));
             }
             if (!entity.alive) {
+                // add to score for killing a Point
+                tick += 180;
+                // add explosion entity to entity list
                 entities.push(entity.explode());
-                console.log("sup dude");
             }
-        }
-        // test code below
-        if (entity instanceof Explosion) {
-            console.log("sup dude");
         }
     });
 
-    // deadPoints = deadPoints.filter(point => point.explodeTime - tick > -12);
-
+    // filter out any entities that are no longer "alive"
     entities = entities.filter(entity => isAlive(entity));
 
-    //player death
+    // check special shadow collision with player
     shadow.consumePlayer(player);
 
     if (!player.alive) {
@@ -125,31 +108,22 @@ function update() {
     }
 }
 
-function mainLoop() {
-    if (player.alive) {
-        document.getElementById("TICKS").innerHTML = "Score: " + tick;
-        tick++;
-        update();
-        render();
-        window.requestAnimationFrame(mainLoop);
-    }
-}
 
-function death() {
+function death() : void {
     if(tick > highScore) {
         highScore = tick;
     }
+
     document.getElementById("TICKS").innerHTML = "GAME OVER, Your score was: " + tick + ", Highscore is: " + highScore + " (Click to retry)";
     isGameStarted = false;
     render();
-    // context.drawImage(explosion, player.x + 8, player.y + 8);
     canvas.onmousedown = null;
     setTimeout(function() {
         setCanvasClickEvent();
     }, 2500);
 }
 
-function getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent) {
+function getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent) : void {
     rect = canvas.getBoundingClientRect();
     mouseX = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
     mouseY = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
@@ -178,10 +152,11 @@ function setCanvasClickEvent() {
     }
 }
 
-function reset() {
+setCanvasClickEvent();
+
+function reset() : void {
     tick = 0;
     spawnRate = 60;
-    // deadPoints = [];
     player = new Player();
     tracker = new Point(1020, 128, 0, 0);
     shadow = new Shadow();
@@ -189,4 +164,12 @@ function reset() {
     entities.push(player);
 }
 
-setCanvasClickEvent();
+function mainLoop() : void {
+    if (player.alive) {
+        document.getElementById("TICKS").innerHTML = "Score: " + tick;
+        tick++;
+        update();
+        render();
+        window.requestAnimationFrame(mainLoop);
+    }
+}
