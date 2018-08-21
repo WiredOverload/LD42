@@ -11,6 +11,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     var entities = [];
     entities.push(player);
     var tick = 0;
+    var gameSpeed = 144;
     var music = new Audio("assets/RayTracer2.mp3");
     var isGameStarted = false;
     var highScore = 0;
@@ -27,6 +28,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                 entity.render(context);
             }
         });
+        window.requestAnimationFrame(render);
     }
     render();
     function update() {
@@ -97,7 +99,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                 music.play();
                 music.volume = 0.7;
                 music.loop = true;
-                window.requestAnimationFrame(mainLoop);
+                window.setInterval(mainLoop, 1000 / gameSpeed);
             }
             else {
                 entities.push(player.shoot());
@@ -120,8 +122,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
             document.getElementById("TICKS").innerHTML = "Score: " + tick;
             tick++;
             update();
-            render();
-            window.requestAnimationFrame(mainLoop);
         }
     }
 });

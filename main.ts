@@ -26,6 +26,7 @@ var entities:object[] = [];
 entities.push(player);
 
 var tick:number = 0; // acts as score for now as well as time
+var gameSpeed:number = 144; //how many times mainloop is called per second
 var music:HTMLAudioElement = new Audio("assets/RayTracer2.mp3");
 var isGameStarted:boolean = false;
 var highScore:number = 0;
@@ -49,6 +50,8 @@ function render() : void {
             entity.render(context);
         }
     });
+    
+    window.requestAnimationFrame(render);
 }
 
 render();
@@ -143,7 +146,7 @@ function setCanvasClickEvent() {
             music.play();
             music.volume = 0.7;
             music.loop = true;
-            window.requestAnimationFrame(mainLoop);
+            window.setInterval(mainLoop, 1000 / gameSpeed);
         }
         else {
             entities.push(player.shoot());
@@ -169,7 +172,5 @@ function mainLoop() : void {
         document.getElementById("TICKS").innerHTML = "Score: " + tick;
         tick++;
         update();
-        render();
-        window.requestAnimationFrame(mainLoop);
     }
 }
