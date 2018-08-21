@@ -11,6 +11,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
     var entities = [];
     entities.push(player);
     var tick = 0;
+    var interval;
     var gameSpeed = 144;
     var music = new Audio("assets/RayTracer2.mp3");
     var isGameStarted = false;
@@ -58,7 +59,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                     tempLines.push(new Line_1.Line(0, 128, entity.x, entity.y));
                 }
                 if (!entity.alive) {
-                    tick += 180;
+                    tick += 180 * (gameSpeed / 60);
                     entities.push(entity.explode());
                 }
             }
@@ -79,7 +80,8 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
         canvas.onmousedown = null;
         setTimeout(function () {
             setCanvasClickEvent();
-        }, 2500);
+        }, 1000);
+        window.clearInterval(interval);
     }
     function getMousePos(canvas, evt) {
         rect = canvas.getBoundingClientRect();
@@ -99,7 +101,7 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
                 music.play();
                 music.volume = 0.7;
                 music.loop = true;
-                window.setInterval(mainLoop, 1000 / gameSpeed);
+                interval = setInterval(mainLoop, 1000 / gameSpeed);
             }
             else {
                 entities.push(player.shoot());

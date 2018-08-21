@@ -26,6 +26,7 @@ var entities:object[] = [];
 entities.push(player);
 
 var tick:number = 0; // acts as score for now as well as time
+var interval; //I honestly don't know what type this would be
 var gameSpeed:number = 144; //how many times mainloop is called per second
 var music:HTMLAudioElement = new Audio("assets/RayTracer2.mp3");
 var isGameStarted:boolean = false;
@@ -50,7 +51,7 @@ function render() : void {
             entity.render(context);
         }
     });
-    
+
     window.requestAnimationFrame(render);
 }
 
@@ -93,7 +94,7 @@ function update() : void {
             }
             if (!entity.alive) {
                 // add to score for killing a Point
-                tick += 180;
+                tick += 180 * (gameSpeed / 60);
                 // add explosion entity to entity list
                 entities.push(entity.explode());
             }
@@ -123,7 +124,8 @@ function death() : void {
     canvas.onmousedown = null;
     setTimeout(function() {
         setCanvasClickEvent();
-    }, 2500);
+    }, 1000);
+    window.clearInterval(interval);
 }
 
 function getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent) : void {
@@ -146,7 +148,7 @@ function setCanvasClickEvent() {
             music.play();
             music.volume = 0.7;
             music.loop = true;
-            window.setInterval(mainLoop, 1000 / gameSpeed);
+            interval = setInterval(mainLoop, 1000 / gameSpeed);
         }
         else {
             entities.push(player.shoot());
