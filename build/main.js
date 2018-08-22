@@ -78,10 +78,10 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
         isGameStarted = false;
         render();
         canvas.onmousedown = null;
+        window.clearInterval(interval);
         setTimeout(function () {
             setCanvasClickEvent();
         }, 1000);
-        window.clearInterval(interval);
     }
     function getMousePos(canvas, evt) {
         rect = canvas.getBoundingClientRect();
@@ -98,10 +98,6 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
             if (!isGameStarted) {
                 isGameStarted = true;
                 reset();
-                music.play();
-                music.volume = 0.7;
-                music.loop = true;
-                interval = setInterval(mainLoop, 1000 / gameSpeed);
             }
             else {
                 entities.push(player.shoot());
@@ -118,6 +114,10 @@ define(["require", "exports", "./Player", "./Point", "./Line", "./Shadow", "./IR
         shadow = new Shadow_1.Shadow();
         entities = [];
         entities.push(player);
+        music.play();
+        music.volume = 0.7;
+        music.loop = true;
+        interval = setInterval(mainLoop, 1000 / gameSpeed);
     }
     function mainLoop() {
         if (player.alive) {

@@ -3,6 +3,20 @@
  * ^ Line updates and Point updates should be completely separate even though they are related
  * Finish cleaning up magic numbers
  * Add AABB heights and widths to ICollidable -> entities like bullet don't have the same visual and hitbox heights and widths
+ * Add configurable game speed
+ * Add auto shooting when holding down mouse
+ * Add gradients to shadow edges
+ * Add impact animations
+ * Add shadow edge "flow" animations? shadow would take a number of ticks to move to its new position
+ * Add small white circle around points in shadow
+ * If we want to be realy fancy, add glowing trail to ship
+ * Add option for spawning on multiple sides?
+ *      multiple maps?
+ * Add glowing "bleed" to outside canvas?
+ *      possible with CSS only
+ * Add pulse firing glow animation
+ * Completely redo shadow collision to be slope-based
+ *      should be faster + work with all map types
 */
 import { Player } from "./Player";
 import { Point } from "./Point";
@@ -62,10 +76,11 @@ function update() : void {
 
     // TODO (WiredOverload): clean this up
     if(tick % spawnRate == 0) {
-        tempLines.push(new Line(0, 128, tracker.x, tracker.y));
-        spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1;// the hell is this
-        entities.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));//temp testing values
+        tempLines.push(new Line(0, 128, tracker.x, tracker.y)); //adds white tracking line to new point
+        spawnVel = shadow.topToBottomLine.x2 < shadow.bottomToTopLine.x2 ? (shadow.topToBottomLine.x / 512) + 1 : (shadow.bottomToTopLine.x / 512) + 1; //determines spawned point velocity based off smallest shadow line x
+        entities.push(new Point(-4, 128, Math.random() * spawnVel, (Math.random() * 2) - 1, tempLines));
 
+        //speeds up the spawnrate exponentially up to once every 5 ticks, if adding difficulty make that a variable
         if(tick % (spawnRate * 5) == 0 && spawnRate != 5) {
             spawnRate--;
         }
@@ -122,10 +137,10 @@ function death() : void {
     isGameStarted = false;
     render();
     canvas.onmousedown = null;
+    window.clearInterval(interval);
     setTimeout(function() {
         setCanvasClickEvent();
     }, 1000);
-    window.clearInterval(interval);
 }
 
 function getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent) : void {
@@ -145,10 +160,6 @@ function setCanvasClickEvent() {
         if(!isGameStarted) {
             isGameStarted = true;
             reset();
-            music.play();
-            music.volume = 0.7;
-            music.loop = true;
-            interval = setInterval(mainLoop, 1000 / gameSpeed);
         }
         else {
             entities.push(player.shoot());
@@ -167,6 +178,10 @@ function reset() : void {
     shadow = new Shadow();
     entities = [];
     entities.push(player);
+    music.play();
+    music.volume = 0.7;
+    music.loop = true;
+    interval = setInterval(mainLoop, 1000 / gameSpeed);
 }
 
 function mainLoop() : void {

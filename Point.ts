@@ -66,7 +66,7 @@ export class Point implements IUpdatable, IRenderable, ICollidable, IKillable {
                     params.shadow.topToBottomLine = tempLine;
                 }
             }
-            else if(this.y >= 248) {
+            else if(this.y >= 248) { //256 - pointHeight / 2
                 this.y = 248;
                 this.stuck = true;
                 var isFarthest:boolean = true;
@@ -119,7 +119,7 @@ export class Point implements IUpdatable, IRenderable, ICollidable, IKillable {
             }
         }
         else {
-            //point deletion
+            //point deletion if it gets stuck far into the shadow
             if(this.y == 0) {
                 if(this.x < params.shadow.topToBottomLine.x - 64) {
                     params.entities.splice(params.entities.indexOf(this), 1);
